@@ -1,0 +1,337 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ===== Payment Method ===== */
+.paymentModal {
+  width: 400px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.paymentTitle {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.paymentSelect {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  outline: none;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.paymentSelect:focus {
+  border-color: #ea580c;
+}
+
+.paymentActions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.btnSecondary {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btnPrimary {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #ea580c;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btnPrimary:hover {
+  background: #d4550a;
+}
+
+.btnSecondary:hover {
+  background: #f3f4f6;
+}
+
+/* ===== QR Popup ===== */
+.qrModal {
+  width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.qrAmount {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ea580c;
+  margin: 0;
+}
+
+.qrTitle {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.qrCode {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.qrImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.qrPlaceholder {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  color: #9ca3af;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qrHint {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.qrBankInfo {
+  width: 100%;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qrBankRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.qrBankLabel {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.qrBankValue {
+  color: #111827;
+  font-weight: 600;
+  text-align: right;
+}
+
+.qrCopyBtn {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ea580c;
+  background: none;
+  border: 1px solid #ea580c;
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.qrCopyBtn:hover {
+  background: #ea580c;
+  color: #ffffff;
+}
+
+.qrActions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ===== Receipt ===== */
+.receiptModal {
+  width: 400px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.receiptBrand {
+  width: 100%;
+  height: 80px;
+  background: #111827;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.receiptTitle {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  text-align: center;
+}
+
+.receiptDivider {
+  width: 100%;
+  border: none;
+  border-top: 1px dashed #374151;
+  margin: 0;
+}
+
+.receiptInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.receiptInfoRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #374151;
+}
+
+.receiptInfoLabel {
+  color: #374151;
+}
+
+.receiptInfoValue {
+  color: #374151;
+  text-align: right;
+}
+
+.receiptItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.receiptItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.receiptItemName {
+  flex: 1;
+  color: #111827;
+}
+
+.receiptItemQty {
+  width: 40px;
+  text-align: center;
+  color: #111827;
+}
+
+.receiptItemPrice {
+  width: 80px;
+  text-align: right;
+  color: #111827;
+}
+
+.receiptTotalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receiptTotalLabel {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.receiptTotalValue {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ea580c;
+}
+
+.receiptAction {
+  margin-top: 8px;
+}

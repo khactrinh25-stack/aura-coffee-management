@@ -1,0 +1,118 @@
+/* ===== Page Layout ===== */
+.mainContent {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: #f3f4f6;
+}
+
+.productAreaWrapper {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border-right: 1px solid #d1d5db;
+  overflow-y: auto;
+}
+
+.cartAreaWrapper {
+  width: 440px;
+  min-width: 440px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ===== Navigation Lock Modal ===== */
+.navLockOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.navLockModal {
+  width: 360px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.navLockTitle {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  text-align: center;
+}
+
+.navLockDesc {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #374151;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.navLockActions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.navLockSecondary {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  text-align: center;
+}
+
+.navLockDanger {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #ef4444;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+}
+
+.navLockDanger:hover {
+  background: #dc2626;
+}
+
+.navLockSecondary:hover {
+  background: #f3f4f6;
+}
+
+/* ===== Submit Error ===== */
+.submitError {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+  color: #ef4444;
+  padding: 8px 24px;
+  margin: 0;
+  background: #fef2f2;
+  border-top: 1px solid #fecaca;
+}

@@ -1,0 +1,440 @@
+.cartArea {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-sizing: border-box;
+  border-left: 1px solid #d1d5db;
+  position: relative;
+}
+
+.cartTitle {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px;
+}
+
+/* ===== Customer Search ===== */
+.customerSection {
+  margin-bottom: 16px;
+}
+
+.phoneInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #ea580c;
+  border-radius: 8px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.phoneInput:disabled {
+  opacity: 0.5;
+  border-color: #e5e7eb;
+  background: #f9fafb;
+}
+
+.phoneInput::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* ===== Customer Info Card ===== */
+.customerCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #fef3c7;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.customerIcon {
+  width: 14px;
+  height: 18px;
+  color: #ea580c;
+}
+
+.customerName {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ea580c;
+  margin: 0;
+}
+
+.pointsBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #ea580c;
+  border-radius: 4px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ea580c;
+}
+
+/* ===== Point Toggle ===== */
+.pointToggleSection {
+  margin-bottom: 12px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.toggleLabel {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.toggleSwitchActive {
+  background: #059669;
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggleKnobActive {
+  transform: translateX(20px);
+}
+
+.toggleStatus {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  margin: 4px 0 0;
+}
+
+.pointInputRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pointInput {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+  outline: none;
+}
+
+.pointInput:focus {
+  border-color: #ea580c;
+}
+
+.pointInputHint {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.earnPointsHint {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #059669;
+  margin: 4px 0 0;
+}
+
+/* ===== Cart Items ===== */
+.cartItems {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cartItem {
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemName {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.itemPrice {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.itemUnitPrice {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin: 4px 0 0;
+}
+
+.quantityRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.qtyBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #000000;
+}
+
+.qtyBtn:hover {
+  background: #e5e7eb;
+}
+
+.qtyBtnAdd {
+  background: #fef3c7;
+  color: #ea580c;
+}
+
+.qtyBtnAdd:hover {
+  background: #fde68a;
+}
+
+.qtyValue {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  min-width: 20px;
+  text-align: center;
+}
+
+.itemToppingHint {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+.emptyCart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  color: #9ca3af;
+}
+
+/* ===== Price Summary ===== */
+.priceSummary {
+  border-top: 2px solid #d1d5db;
+  padding: 15px 0 0;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryLabel {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #808080;
+  margin: 0;
+}
+
+.summaryValue {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.discountRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.discountLabel {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #059669;
+  margin: 0;
+}
+
+.discountValue {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #059669;
+  margin: 0;
+}
+
+.dashedDivider {
+  width: 100%;
+  border: none;
+  border-top: 2px dashed #d1d5db;
+  margin: 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.totalValue {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+/* ===== Action Buttons ===== */
+.actionRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.trashBtn {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.trashBtn:hover {
+  background: #f3f4f6;
+}
+
+.trashIcon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+}
+
+.payBtn {
+  flex: 1;
+  height: 56px;
+  background: #ea580c;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.payBtn:hover {
+  background: #d4550a;
+}
+
+.payBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 13px;
+  color: #ef4444;
+  margin: 0;
+  text-align: center;
+}
