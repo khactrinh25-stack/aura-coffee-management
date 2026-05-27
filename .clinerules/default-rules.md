@@ -156,3 +156,71 @@ The following files are local environment-specific and MUST NOT be pushed to the
 
 ### VS Code Workspace Settings (`.vscode/`)
 The `.vscode/` directory is included in the repository to ensure all team members share consistent editor configurations (formatting rules, tab size, linting, etc.). This prevents merge conflicts caused by different code formatting settings.
+
+## GIT AUTOMATION RULES FOR AI (DEVELOPER-FRIENDLY)
+
+Since most developers on this project have no Git background, the AI (Cline) **MUST proactively handle all Git operations** for them. Developers only need to describe what they want in plain language.
+
+### General Rules
+- The AI MUST NOT ask the developer to run Git commands manually.
+- The AI MUST execute all Git operations itself using tool calls (execute_command).
+- The AI MUST provide simple explanations of what was done after each operation.
+
+### Branch Management (AI-Automated)
+- When a developer says "start a new feature called [name]", the AI MUST:
+  1. Run `git checkout develop`
+  2. Run `git pull origin develop`
+  3. Run `git checkout -b feature/[name]`
+  4. Tell the developer: "Done! You are now on branch feature/[name]"
+
+- When a developer says "push my code" or "commit my code", the AI MUST:
+  1. Run `git add -A` to stage all changes
+  2. Check what files were changed: `git status --short`
+  3. Ask the developer what message to use (or suggest a Conventional Commits message based on the changes)
+  4. Run `git commit -m "type: message"` using Conventional Commits format
+  5. Run `git push origin [current-branch]`
+  6. Tell the developer: "Done! Code pushed to [branch]. Link: [GitHub URL]"
+
+- When a developer says "pull the latest code", the AI MUST:
+  1. Determine the current branch: `git branch --show-current`
+  2. Run `git stash` if there are uncommitted changes (to avoid conflicts)
+  3. Run `git pull origin [current-branch]`
+  4. Run `git stash pop` if stashed
+  5. Tell the developer: "Done! Latest code pulled successfully."
+
+- When a developer says "switch to [branch]" or "change branch to [branch]", the AI MUST:
+  1. Run `git stash` if there are uncommitted changes
+  2. Run `git checkout [branch-name]`
+  3. Run `git stash pop` if stashed
+  4. Tell the developer: "Done! Now on branch [branch-name]"
+
+- When a developer says "create a Pull Request", the AI MUST:
+  1. Run `git push origin [current-branch]` (ensure latest code is pushed)
+  2. Use GitHub CLI or open the PR URL for the developer:
+     - The AI provides the URL: `https://github.com/khactrinh25-stack/aura-coffee-management/pull/new/[current-branch]`
+  3. Tell the developer: "Done! Go to this link to create the PR: [URL]. Select `develop` as the base branch."
+
+- When a developer says "I want to merge my feature into develop", the AI MUST:
+  1. Ensure all changes are committed and pushed: `git push origin [current-branch]`
+  2. Switch to develop: `git checkout develop`
+  3. Pull latest develop: `git pull origin develop`
+  4. Merge the feature branch: `git merge [current-branch]`
+  5. Push develop: `git push origin develop`
+  6. Tell the developer: "Done! Feature merged into develop."
+
+- When a developer says "sync my branch with develop" (to get latest changes), the AI MUST:
+  1. Run `git stash` if there are uncommitted changes
+  2. Run `git checkout develop`
+  3. Run `git pull origin develop`
+  4. Run `git checkout [original-branch]`
+  5. Run `git merge develop`
+  6. Resolve any merge conflicts by asking the developer for guidance
+  7. Run `git stash pop` if stashed
+  8. Tell the developer: "Done! Branch synced with latest develop."
+
+### Important Git Safety Rules for AI
+- Before running `git checkout`, always check for uncommitted changes first with `git status`.
+- If there are uncommitted changes, run `git stash` first, then `git stash pop` after switching.
+- Never use `git push --force` unless explicitly instructed by the developer.
+- Always confirm destructive operations (reset, rebase, force push) with the developer before proceeding.
+- After creating a new feature branch, remind the developer to tell Cline "push my code" when they want to commit.
