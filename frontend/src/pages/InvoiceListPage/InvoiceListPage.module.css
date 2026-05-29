@@ -1,0 +1,276 @@
+.pageWrapper {
+  padding: 24px;
+  min-height: 100%;
+  background: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.searchPanel {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.searchInputGroup {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  min-width: 280px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #111827;
+  background: #ffffff;
+}
+
+.searchButton {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #f97316;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2);
+}
+
+.filterSelect {
+  min-width: 220px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.errorBox {
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 14px 18px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+}
+
+.listContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.listHeaderRow,
+.listRow {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 1.5fr 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+}
+
+.listHeaderRow {
+  background: #e5e7eb;
+  border-radius: 16px;
+  color: #374151;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.listRow {
+  background: #f3f4f6;
+  border-radius: 16px;
+}
+
+.rowValue {
+  font-size: 14px;
+  color: #111827;
+}
+
+.viewButton {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyState,
+.loadingState {
+  padding: 32px 0;
+  text-align: center;
+  color: #6b7280;
+}
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+}
+
+.popupContent {
+  width: min(640px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 0;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.detailHeaderButton {
+  width: fit-content;
+  margin: 16px auto 0;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: #f8c165;
+  color: #111827;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.detailBody {
+  padding: 24px 28px 28px;
+}
+
+.detailRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #111827;
+}
+
+.detailLabel {
+  min-width: 110px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.detailSectionTitle {
+  margin: 18px 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.popupTableWrapper {
+  overflow-x: auto;
+  margin-bottom: 18px;
+}
+
+.popupTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.popupTable th,
+.popupTable td {
+  padding: 12px 10px;
+  font-size: 14px;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.popupTable th {
+  font-weight: 700;
+  text-align: left;
+  background: transparent;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  font-size: 15px;
+}
+
+.noteSection {
+  background: #f3f4f6;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.noteLabel {
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.noteText {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #111827;
+}
+
+.detailFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.printButton,
+.closeButton {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.printButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.printIcon {
+  font-size: 16px;
+}
+
+.closeButton {
+  background: #ef4444;
+  color: #ffffff;
+}

@@ -17,6 +17,7 @@ import com.auracoffee.management.repository.DoUongRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -102,8 +103,23 @@ public class HoaDonService {
         }
     }
 
-    public List<HoaDonResponse> getAll() {
-        List<HoaDon> hoaDons = hoaDonRepository.findAll();
+    public List<HoaDonResponse> getAll(String phuongThucThanhToan, String vaiTro, Integer maNhanVien) {
+        List<HoaDon> hoaDons;
+        if (phuongThucThanhToan != null && !phuongThucThanhToan.isBlank()) {
+            hoaDons = hoaDonRepository.findAllByPhuongThucThanhToanOrderByNgayTaoDesc(phuongThucThanhToan);
+        } else {
+            hoaDons = hoaDonRepository.findAllByOrderByNgayTaoDesc();
+        }
+
+        if ("NhanVien".equals(vaiTro) && maNhanVien != null) {
+            LocalDate today = LocalDate.now();
+            hoaDons = hoaDons.stream()
+                    .filter(hd -> maNhanVien.equals(hd.getMaNhanVien())
+                            && hd.getNgayTao() != null
+                            && hd.getNgayTao().toLocalDate().equals(today))
+                    .collect(Collectors.toList());
+        }
+
         Map<Integer, String> nhanVienMap = nhanVienRepository.findAll().stream()
                 .collect(Collectors.toMap(NhanVien::getMaNhanVien, NhanVien::getHoTen));
         Map<Integer, String> doUongMap = doUongRepository.findAll().stream()
