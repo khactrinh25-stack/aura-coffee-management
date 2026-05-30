@@ -24,8 +24,8 @@ export const ADMIN_MENU = [
   },
   {
     id: 'products',
-    label: 'Quản lý sản phẩm',
-    path: '/admin/san-pham',
+    label: 'Quản lý đồ uống',
+    path: '/admin/do-uong',
   },
   {
     id: 'orders',

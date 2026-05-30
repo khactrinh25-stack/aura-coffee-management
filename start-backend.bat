@@ -22,7 +22,7 @@ call mvnw.cmd clean package -DskipTests -q
 if %errorlevel% neq 0 (
     echo   LOI: Build backend that bai! Vui long kiem tra loi trong terminal.
     pause
-    exit /b 1
+    exit /b 1.
 )
 echo   Build thanh cong.
 echo.

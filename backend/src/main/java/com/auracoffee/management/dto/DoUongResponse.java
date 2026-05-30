@@ -5,6 +5,7 @@ import com.auracoffee.management.entity.DoUong;
 public class DoUongResponse {
 
     private Integer maDoUong;
+    private String maDoUongCode;
     private String tenDoUong;
     private Integer giaBan;
     private Integer maDanhMuc;
@@ -14,6 +15,7 @@ public class DoUongResponse {
     public static DoUongResponse from(DoUong entity, String tenDanhMuc) {
         DoUongResponse dto = new DoUongResponse();
         dto.setMaDoUong(entity.getMaDoUong());
+        dto.setMaDoUongCode(entity.getMaDoUongCode());
         dto.setTenDoUong(entity.getTenDoUong());
         dto.setGiaBan(entity.getGiaBan());
         dto.setMaDanhMuc(entity.getMaDanhMuc());
@@ -24,6 +26,8 @@ public class DoUongResponse {
 
     public Integer getMaDoUong() { return maDoUong; }
     public void setMaDoUong(Integer maDoUong) { this.maDoUong = maDoUong; }
+    public String getMaDoUongCode() { return maDoUongCode; }
+    public void setMaDoUongCode(String maDoUongCode) { this.maDoUongCode = maDoUongCode; }
     public String getTenDoUong() { return tenDoUong; }
     public void setTenDoUong(String tenDoUong) { this.tenDoUong = tenDoUong; }
     public Integer getGiaBan() { return giaBan; }
