@@ -16,4 +16,8 @@ public interface DoUongRepository extends JpaRepository<DoUong, Integer> {
     boolean existsByMaDoUongCode(String maDoUongCode);
 
     boolean existsByTenDoUong(String tenDoUong);
+
+    int countByMaDoUongCodeIsNull();
+
+    List<DoUong> findByMaDoUongCodeIsNull();
 }

@@ -129,6 +129,26 @@ public class DataInitializer implements CommandLineRunner {
         // ============================================================
         // 3. Seed DO_UONG (25 đồ uống với giá thực tế) - only if empty
         // ============================================================
+        // Fix existing DO_UONG records that have null maDoUongCode
+        int nullCodeCount = doUongRepository.countByMaDoUongCodeIsNull();
+        if (nullCodeCount > 0) {
+            System.out.println("  - DO_UONG: fixing " + nullCodeCount + " records with null maDoUongCode...");
+            for (var du : doUongRepository.findByMaDoUongCodeIsNull()) {
+                String prefix;
+                int maDanhMuc = du.getMaDanhMuc();
+                if (maDanhMuc == 1 || maDanhMuc == 13) prefix = "CF";
+                else if (maDanhMuc == 2 || maDanhMuc == 14) prefix = "TS";
+                else if (maDanhMuc == 3 || maDanhMuc == 15) prefix = "NE";
+                else if (maDanhMuc == 4 || maDanhMuc == 16) prefix = "ST";
+                else if (maDanhMuc == 5 || maDanhMuc == 17) prefix = "DX";
+                else prefix = "CS";
+                String code = prefix + String.format("%03d", du.getMaDoUong() % 100);
+                du.setMaDoUongCode(code);
+                doUongRepository.save(du);
+            }
+            System.out.println("  - DO_UONG: fixed all null maDoUongCode");
+        }
+
         if (doUongRepository.count() == 0) {
             System.out.println("  - DO_UONG: seeding...");
 

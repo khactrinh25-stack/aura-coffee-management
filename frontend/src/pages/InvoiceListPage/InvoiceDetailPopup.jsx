@@ -1,11 +1,6 @@
 import styles from './InvoiceListPage.module.css'
 import { formatVND } from '../../utils/cartUtils'
 
-const PAYMENT_LABELS = {
-  TIEN_MAT: 'Tiền mặt',
-  CHUYEN_KHOAN: 'Chuyển khoản',
-}
-
 const parseAttributes = (ghiChu) => {
   try {
     const attrs = JSON.parse(ghiChu)

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { getNhanVienSession } from '../../utils/session';
-import { addToCart, updateQuantity, clearCart, calcSubtotal } from '../../utils/cartUtils';
+import { addToCart, updateQuantity, clearCart } from '../../utils/cartUtils';
 import { apiClient } from '../../api/apiClient';
 
 import ProductArea from './components/ProductArea/ProductArea';
@@ -55,6 +55,7 @@ function SalesManagementPage() {
 
   // === Customer Search Callback ===
   // Called from CartArea when a phone is looked up
+  // eslint-disable-next-line no-unused-vars
   const [currentCustomer, setCurrentCustomer] = useState(null);
 
   const handleFoundCustomer = useCallback((customerData, phone) => {
@@ -126,7 +127,6 @@ function SalesManagementPage() {
     if (!payPayload) return;
     setSubmitError('');
 
-    const subtotal = calcSubtotal(cart);
     const chiTietList = cart.map((item) => ({
       maDoUong: item.maDoUong,
       soLuong: item.soLuong,

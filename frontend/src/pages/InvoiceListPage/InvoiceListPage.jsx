@@ -26,15 +26,13 @@ const formatDateTime = (value) => {
   }).format(new Date(value))
 }
 
-function InvoiceListPage({ scope }) {
+function InvoiceListPage() {
   const [invoices, setInvoices] = useState([])
   const [filterMethod, setFilterMethod] = useState('')
   const [searchCode, setSearchCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [selectedInvoice, setSelectedInvoice] = useState(null)
-
-  const isEmployee = scope === 'employee'
 
   useEffect(() => {
     const fetchInvoices = async () => {

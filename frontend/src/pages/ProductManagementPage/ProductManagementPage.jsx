@@ -44,38 +44,44 @@ function ProductManagementPage() {
   const [editingBeverage, setEditingBeverage] = useState(null);
   const [deletingBeverage, setDeletingBeverage] = useState(null);
 
-  const fetchBeverages = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const params = {};
-      if (filterStatus) params.trangThai = filterStatus;
-      if (filterCategory) params.maDanhMuc = Number(filterCategory);
-      const res = await beverageApi.getAll(params);
-      setBeverages(res.data);
-    } catch {
-      setError('Không thể tải danh sách đồ uống. Vui lòng thử lại.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const res = await danhMucApi.getAll();
-      setCategories(res.data);
-    } catch {
-      // silently fail for categories
-    }
-  };
-
+  // Load categories once
   useEffect(() => {
-    fetchCategories();
+    danhMucApi.getAll().then((res) => {
+      setCategories(res.data);
+    }).catch(() => {});
   }, []);
 
+  // Load beverages when filters change
   useEffect(() => {
-    fetchBeverages();
+    const params = {};
+    if (filterStatus) params.trangThai = filterStatus;
+    if (filterCategory) params.maDanhMuc = Number(filterCategory);
+    beverageApi.getAll(params).then((res) => {
+      setLoading(false);
+      setError(null);
+      setBeverages(res.data);
+    }).catch(() => {
+      setLoading(false);
+      setError('Không thể tải danh sách đồ uống. Vui lòng thử lại.');
+    });
   }, [filterStatus, filterCategory]);
+
+  const fetchBeverages = () => {
+    setLoading(true);
+    setError(null);
+    const params = {};
+    if (filterStatus) params.trangThai = filterStatus;
+    if (filterCategory) params.maDanhMuc = Number(filterCategory);
+    beverageApi.getAll(params)
+      .then((res) => {
+        setBeverages(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Không thể tải danh sách đồ uống. Vui lòng thử lại.');
+        setLoading(false);
+      });
+  };
 
   // Client-side search filter
   const filtered = beverages.filter((b) => {
