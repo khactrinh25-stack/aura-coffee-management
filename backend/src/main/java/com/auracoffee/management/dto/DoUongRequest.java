@@ -1,43 +1,12 @@
-package com.auracoffee.management.entity;
+package com.auracoffee.management.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class DoUongRequest {
 
-@Entity
-@Table(name = "DO_UONG")
-public class DoUong {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ma_do_uong")
-    private Integer maDoUong;
-
-    @Column(name = "ma_do_uong_code", length = 20)
     private String maDoUongCode;
-
-    @Column(name = "ten_do_uong", nullable = false)
     private String tenDoUong;
-
-    @Column(name = "gia_ban", nullable = false)
     private Integer giaBan;
-
-    @Column(name = "ma_danh_muc")
     private Integer maDanhMuc;
-
-    @Column(name = "trang_thai")
     private String trangThai;
-
-    public Integer getMaDoUong() {
-        return maDoUong;
-    }
-
-    public void setMaDoUong(Integer maDoUong) {
-        this.maDoUong = maDoUong;
-    }
 
     public String getMaDoUongCode() {
         return maDoUongCode;

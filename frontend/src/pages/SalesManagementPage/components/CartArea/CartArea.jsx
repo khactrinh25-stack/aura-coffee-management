@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { apiClient } from '../../../../api/apiClient';
 import Icon from '../../../../components/Icon';
 import {
-  updateQuantity,
   calcSubtotal,
   calcEarnedPoints,
   calcDiscountFromPoints,
@@ -23,7 +22,6 @@ function CartArea({
   const [pointMode, setPointMode] = useState('earn'); // 'earn' | 'use'
   const [diemSuDung, setDiemSuDung] = useState(0);
   const [error, setError] = useState('');
-  const [searching, setSearching] = useState(false);
   const debounceRef = useRef(null);
 
   const subtotal = calcSubtotal(cart);
@@ -31,6 +29,7 @@ function CartArea({
 
   // Reset customer + point mode when cart becomes empty
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (isCartEmpty) {
       setCustomer(null);
       setPhoneNumber('');
@@ -38,10 +37,12 @@ function CartArea({
       setDiemSuDung(0);
       setError('');
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [isCartEmpty]);
 
   // Debounced phone lookup
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     if (!phoneNumber.trim() || phoneNumber.trim().length < 7) {
@@ -50,13 +51,12 @@ function CartArea({
       setDiemSuDung(0);
       return;
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
 
-    setSearching(true);
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const data = await apiClient(
-          `/khach-hang?soDienThoai=${encodeURIComponent(phoneNumber.trim())}`
-        );
+    debounceRef.current = setTimeout(() => {
+      apiClient(
+        `/khach-hang?soDienThoai=${encodeURIComponent(phoneNumber.trim())}`
+      ).then((data) => {
         if (data) {
           setCustomer(data);
           onFoundCustomer(data);
@@ -69,30 +69,22 @@ function CartArea({
           setCustomer(null);
           onFoundCustomer(null, phoneNumber.trim());
         }
-      } catch {
+      }).catch(() => {
         setCustomer(null);
         onFoundCustomer(null, phoneNumber.trim());
-      } finally {
-        setSearching(false);
-      }
+      });
     }, 500);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [phoneNumber]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phoneNumber]);
   // onFoundCustomer is stable callback from parent
 
   const handlePhoneChange = (value) => {
     setPhoneNumber(value);
     setError('');
-  };
-
-  const handleClearPhone = () => {
-    setPhoneNumber('');
-    setCustomer(null);
-    setPointMode('earn');
-    setDiemSuDung(0);
   };
 
   const handleTogglePointMode = () => {

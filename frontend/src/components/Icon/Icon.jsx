@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   FiEye, FiCheck, FiX, FiPlus, FiSearch, FiPlusCircle, 
   FiLock, FiKey, FiEdit3, FiStar, FiEyeOff 

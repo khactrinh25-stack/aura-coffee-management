@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import PagePlaceholder from './components/PagePlaceholder/PagePlaceholder'
 import RevenuePage from './pages/RevenuePage/RevenuePage'
 import SalesManagementPage from './pages/SalesManagementPage/SalesManagementPage'
+import ProductManagementPage from './pages/ProductManagementPage/ProductManagementPage'
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           }
         >
           <Route index element={<SalesManagementPage />} />
-          <Route path="don-hang" element={<InvoiceListPage scope="employee" />} />
+          <Route path="don-hang" element={<InvoiceListPage />} />
           <Route path="cai-dat" element={<AccountSettingsPage />} />
         </Route>
 
@@ -40,16 +41,8 @@ function App() {
         >
           <Route index element={<Navigate to="/admin/doanh-thu" replace />} />
           <Route path="doanh-thu" element={<RevenuePage />} />
-          <Route
-            path="san-pham"
-            element={
-              <PagePlaceholder
-                title="Quản lý sản phẩm"
-                description="Triển khai theo PRODUCT_GUIDELINES.md."
-              />
-            }
-          />
-          <Route path="don-hang" element={<InvoiceListPage scope="admin" />} />
+          <Route path="do-uong" element={<ProductManagementPage />} />
+          <Route path="don-hang" element={<InvoiceListPage />} />
           <Route
             path="khach-hang"
             element={
