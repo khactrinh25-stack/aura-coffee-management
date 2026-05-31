@@ -46,9 +46,11 @@ function ProductManagementPage() {
 
   // Load categories once
   useEffect(() => {
-    danhMucApi.getAll().then((res) => {
-      setCategories(res.data);
-    }).catch(() => {});
+    danhMucApi.getAll().then((data) => {
+      setCategories(data);
+    }).catch((err) => {
+      console.error('Categories API error:', err.message);
+    });
   }, []);
 
   // Load beverages when filters change
@@ -56,13 +58,16 @@ function ProductManagementPage() {
     const params = {};
     if (filterStatus) params.trangThai = filterStatus;
     if (filterCategory) params.maDanhMuc = Number(filterCategory);
-    beverageApi.getAll(params).then((res) => {
+    setLoading(true);
+    setError(null);
+    beverageApi.getAll(params).then((data) => {
       setLoading(false);
       setError(null);
-      setBeverages(res.data);
-    }).catch(() => {
+      setBeverages(data);
+    }).catch((err) => {
+      console.error('Beverages API error:', err.message);
       setLoading(false);
-      setError('Không thể tải danh sách đồ uống. Vui lòng thử lại.');
+      setError(err.message || 'Không thể tải danh sách đồ uống. Vui lòng thử lại.');
     });
   }, [filterStatus, filterCategory]);
 
@@ -73,8 +78,8 @@ function ProductManagementPage() {
     if (filterStatus) params.trangThai = filterStatus;
     if (filterCategory) params.maDanhMuc = Number(filterCategory);
     beverageApi.getAll(params)
-      .then((res) => {
-        setBeverages(res.data);
+      .then((data) => {
+        setBeverages(data);
         setLoading(false);
       })
       .catch(() => {
