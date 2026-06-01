@@ -17,8 +17,11 @@ import com.auracoffee.management.repository.DoUongRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auracoffee.management.dto.RevenueReportItem;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -132,5 +135,41 @@ public class HoaDonService {
                     .collect(Collectors.toList());
             return HoaDonResponse.from(hd, nhanVienMap.get(hd.getMaNhanVien()), chiTietResponses);
         }).collect(Collectors.toList());
+    }
+
+    public List<RevenueReportItem> getRevenueReport(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date must be before or equal to end date");
+        }
+
+        if (startDate.plusDays(365).isBefore(endDate)) {
+            throw new IllegalArgumentException("Date range must not exceed 365 days");
+        }
+
+        LocalDateTime from = startDate.atStartOfDay();
+        LocalDateTime to = endDate.atTime(LocalTime.MAX);
+
+        List<HoaDon> hoaDons = hoaDonRepository.findAllByNgayTaoBetweenOrderByNgayTaoDesc(from, to);
+        if (hoaDons.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Map<LocalDate, List<HoaDon>> grouped = hoaDons.stream()
+                .filter(hd -> hd.getNgayTao() != null)
+                .collect(Collectors.groupingBy(hd -> hd.getNgayTao().toLocalDate()));
+
+        List<RevenueReportItem> report = new java.util.ArrayList<>();
+        LocalDate current = startDate;
+        while (!current.isAfter(endDate)) {
+            List<HoaDon> dailyHoaDons = grouped.getOrDefault(current, Collections.emptyList());
+            int totalRevenue = dailyHoaDons.stream()
+                    .mapToInt(hd -> hd.getTongTien() != null ? hd.getTongTien() : 0)
+                    .sum();
+            int invoiceCount = dailyHoaDons.size();
+            report.add(new RevenueReportItem(current, totalRevenue, invoiceCount));
+            current = current.plusDays(1);
+        }
+
+        return report;
     }
 }

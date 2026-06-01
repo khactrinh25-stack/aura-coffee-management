@@ -33,6 +33,6 @@ echo.
 echo Vui long cho khoang 10-15 giay de backend chay xong.
 echo Khi thay dong "Tomcat started on port 8080" la OK.
 echo.
-java -jar target\management-0.0.1-SNAPSHOT.jar
+java -Dspring.profiles.active=dev -jar target\management-0.0.1-SNAPSHOT.jar
 
 pause

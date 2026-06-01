@@ -87,6 +87,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Check RBAC
 
         if ("GET".equalsIgnoreCase(method)) {
+            // Report APIs are Admin only
+            if (path.startsWith("/api/hoa-don/report") && !"Admin".equals(vaiTro)) {
+                sendForbidden(response, "Chỉ Admin mới có quyền truy cập báo cáo");
+                return;
+            }
             // GET: allow Admin + NhanVien for these prefixes
             boolean allowed = GET_ALLOWED_PREFIXES.stream().anyMatch(path::startsWith);
             if (!allowed) {
