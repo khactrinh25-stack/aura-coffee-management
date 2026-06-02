@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../../../../api/apiClient';
 import { formatVND } from '../../../../utils/cartUtils';
+import getDrinkImage from '../../../../utils/drinkImageMap';
 import styles from './ProductArea.module.css';
 
 function ProductArea({ onSelectProduct }) {
@@ -106,6 +107,15 @@ function ProductArea({ onSelectProduct }) {
             onClick={() => onSelectProduct(product)}
           >
             <div className={styles.productImage}>
+              <img
+                src={getDrinkImage(product.tenDoUong)}
+                alt={product.tenDoUong}
+                className={styles.productImageTag}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
               <span className={styles.productImagePlaceholder}>
                 {product.tenDoUong?.charAt(0) || '?'}
               </span>

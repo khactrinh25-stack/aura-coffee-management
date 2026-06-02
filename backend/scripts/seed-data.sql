@@ -22,13 +22,12 @@ VALUES
 GO
 
 -- ============================================================
--- 2. DANH_MUC (6 danh mục)
+-- 2. DANH_MUC (5 danh mục) - Nước ép merged into Sinh tố
 -- ============================================================
 INSERT INTO DANH_MUC (ten_danh_muc)
 VALUES
     (N'Cà phê'),
     (N'Trà sữa'),
-    (N'Nước ép'),
     (N'Sinh tố'),
     (N'Đá xay'),
     (N'Cacao & Socola');
@@ -38,10 +37,9 @@ GO
 -- 3. DO_UONG (25 đồ uống)
 -- ============================================================
 -- Lấy ma_danh_muc tương ứng
-DECLARE @caPheId INT, @traSuaId INT, @nuocEpId INT, @sinhToId INT, @daXayId INT, @cacaoId INT;
+DECLARE @caPheId INT, @traSuaId INT, @sinhToId INT, @daXayId INT, @cacaoId INT;
 SELECT @caPheId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Cà phê';
 SELECT @traSuaId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Trà sữa';
-SELECT @nuocEpId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Nước ép';
 SELECT @sinhToId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Sinh tố';
 SELECT @daXayId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Đá xay';
 SELECT @cacaoId = ma_danh_muc FROM DANH_MUC WHERE ten_danh_muc = N'Cacao & Socola';
@@ -60,18 +58,16 @@ INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Tr
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Trà sữa thái xanh', 48000, @traSuaId, 'HOAT_DONG');
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Trà đào cam sả',    45000, @traSuaId, 'HOAT_DONG');
 
--- Nước ép
-INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép cam',       35000, @nuocEpId, 'HOAT_DONG');
-INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép táo',       35000, @nuocEpId, 'HOAT_DONG');
-INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép dưa hấu',   35000, @nuocEpId, 'HOAT_DONG');
-INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép cà rốt',    38000, @nuocEpId, 'HOAT_DONG');
-INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép ổi',        38000, @nuocEpId, 'HOAT_DONG');
-
--- Sinh tố
+-- Sinh tố (merged: original smoothies + former juices)
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Sinh tố bơ',        45000, @sinhToId, 'HOAT_DONG');
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Sinh tố xoài',      40000, @sinhToId, 'HOAT_DONG');
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Sinh tố dâu tây',   42000, @sinhToId, 'HOAT_DONG');
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Sinh tố mãng cầu',  45000, @sinhToId, 'HOAT_DONG');
+INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép cam',       35000, @sinhToId, 'HOAT_DONG');
+INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép táo',       35000, @sinhToId, 'HOAT_DONG');
+INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép dưa hấu',   35000, @sinhToId, 'HOAT_DONG');
+INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép cà rốt',    38000, @sinhToId, 'HOAT_DONG');
+INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Nước ép ổi',        38000, @sinhToId, 'HOAT_DONG');
 
 -- Đá xay
 INSERT INTO DO_UONG (ten_do_uong, gia_ban, ma_danh_muc, trang_thai) VALUES (N'Cà phê đá xay',     49000, @daXayId, 'HOAT_DONG');
@@ -103,6 +99,6 @@ GO
 
 PRINT '=== SEED DATA COMPLETED ===';
 PRINT '- 4 nhân viên';
-PRINT '- 6 danh mục, 25 đồ uống';
+PRINT '- 5 danh mục, 25 đồ uống';
 PRINT '- 10 khách hàng';
 GO

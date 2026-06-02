@@ -84,9 +84,9 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         // ============================================================
-        // 2. Seed DANH_MUC (6 danh mục) - only if empty
+        // 2. Seed DANH_MUC (5 danh mục) - Sinh tố merged into Sinh tố
         // ============================================================
-        DanhMuc dm1, dm2, dm3, dm4, dm5, dm6;
+        DanhMuc dm1, dm2, dm3, dm4, dm5;
 
         if (danhMucRepository.count() == 0) {
             System.out.println("  - DANH_MUC: seeding...");
@@ -100,20 +100,16 @@ public class DataInitializer implements CommandLineRunner {
             danhMucRepository.save(dm2);
 
             dm3 = new DanhMuc();
-            dm3.setTenDanhMuc("Nước ép");
+            dm3.setTenDanhMuc("Sinh tố");
             danhMucRepository.save(dm3);
 
             dm4 = new DanhMuc();
-            dm4.setTenDanhMuc("Sinh tố");
+            dm4.setTenDanhMuc("Đá xay");
             danhMucRepository.save(dm4);
 
             dm5 = new DanhMuc();
-            dm5.setTenDanhMuc("Đá xay");
+            dm5.setTenDanhMuc("Cacao & Socola");
             danhMucRepository.save(dm5);
-
-            dm6 = new DanhMuc();
-            dm6.setTenDanhMuc("Cacao & Socola");
-            danhMucRepository.save(dm6);
         } else {
             System.out.println("  - DANH_MUC: already exists, skipping");
             // Fetch existing categories for reference
@@ -123,11 +119,10 @@ public class DataInitializer implements CommandLineRunner {
             dm3 = allDanhMuc.get(2);
             dm4 = allDanhMuc.get(3);
             dm5 = allDanhMuc.get(4);
-            dm6 = allDanhMuc.get(5);
         }
 
         // ============================================================
-        // 3. Seed DO_UONG (25 đồ uống với giá thực tế) - only if empty
+        // 3. Seed DO_UONG (25 đồ uống) - Sinh tố merged into Sinh tố
         // ============================================================
         // Fix existing DO_UONG records that have null maDoUongCode
         int nullCodeCount = doUongRepository.countByMaDoUongCodeIsNull();
@@ -138,9 +133,8 @@ public class DataInitializer implements CommandLineRunner {
                 int maDanhMuc = du.getMaDanhMuc();
                 if (maDanhMuc == 1 || maDanhMuc == 13) prefix = "CF";
                 else if (maDanhMuc == 2 || maDanhMuc == 14) prefix = "TS";
-                else if (maDanhMuc == 3 || maDanhMuc == 15) prefix = "NE";
-                else if (maDanhMuc == 4 || maDanhMuc == 16) prefix = "ST";
-                else if (maDanhMuc == 5 || maDanhMuc == 17) prefix = "DX";
+                else if (maDanhMuc == 3 || maDanhMuc == 15 || maDanhMuc == 16) prefix = "ST";
+                else if (maDanhMuc == 4 || maDanhMuc == 17) prefix = "DX";
                 else prefix = "CS";
                 String code = prefix + String.format("%03d", du.getMaDoUong() % 100);
                 du.setMaDoUongCode(code);
@@ -166,28 +160,26 @@ public class DataInitializer implements CommandLineRunner {
             saveDoUong("TS004", "Trà sữa thái xanh",   48000, dm2.getMaDanhMuc(), "CON_HANG");
             saveDoUong("TS005", "Trà đào cam sả",      45000, dm2.getMaDanhMuc(), "CON_HANG");
 
-            // --- Nước ép (maDanhMuc = dm3) ---
-            saveDoUong("NE001", "Nước ép cam",         35000, dm3.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("NE002", "Nước ép táo",         35000, dm3.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("NE003", "Nước ép dưa hấu",     35000, dm3.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("NE004", "Nước ép cà rốt",      38000, dm3.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("NE005", "Nước ép ổi",          38000, dm3.getMaDanhMuc(), "CON_HANG");
+            // --- Sinh tố (maDanhMuc = dm3) --- 
+            saveDoUong("ST001", "Sinh tố bơ",          45000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST002", "Sinh tố xoài",        40000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST003", "Sinh tố dâu tây",     42000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST004", "Sinh tố mãng cầu",    45000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST005", "Sinh tố cam",         35000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST006", "Sinh tố táo",         35000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST007", "Sinh tố dưa hấu",     35000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST008", "Sinh tố cà rốt",      38000, dm3.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("ST009", "Sinh tố ổi",          38000, dm3.getMaDanhMuc(), "CON_HANG");
 
-            // --- Sinh tố (maDanhMuc = dm4) ---
-            saveDoUong("ST001", "Sinh tố bơ",          45000, dm4.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("ST002", "Sinh tố xoài",        40000, dm4.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("ST003", "Sinh tố dâu tây",     42000, dm4.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("ST004", "Sinh tố mãng cầu",    45000, dm4.getMaDanhMuc(), "CON_HANG");
+            // --- Đá xay (maDanhMuc = dm4) ---
+            saveDoUong("DX001", "Cà phê đá xay",       49000, dm4.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("DX002", "Cookies & Cream",      55000, dm4.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("DX003", "Matcha đá xay",       52000, dm4.getMaDanhMuc(), "CON_HANG");
 
-            // --- Đá xay (maDanhMuc = dm5) ---
-            saveDoUong("DX001", "Cà phê đá xay",       49000, dm5.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("DX002", "Cookies & Cream",      55000, dm5.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("DX003", "Matcha đá xay",       52000, dm5.getMaDanhMuc(), "CON_HANG");
-
-            // --- Cacao & Socola (maDanhMuc = dm6) ---
-            saveDoUong("CS001", "Cacao nóng",          35000, dm6.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("CS002", "Socola đá xay",       45000, dm6.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("CS003", "Socola latte",        42000, dm6.getMaDanhMuc(), "CON_HANG");
+            // --- Cacao & Socola (maDanhMuc = dm5) ---
+            saveDoUong("CS001", "Cacao nóng",          35000, dm5.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("CS002", "Socola đá xay",       45000, dm5.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("CS003", "Socola latte",        42000, dm5.getMaDanhMuc(), "CON_HANG");
         } else {
             System.out.println("  - DO_UONG: already exists, skipping");
         }
@@ -214,7 +206,8 @@ public class DataInitializer implements CommandLineRunner {
 
         System.out.println("=== DATA INITIALIZER: Seed completed ===");
         System.out.println("  - 4 nhân viên (admin / nv01 / nv02 / nv03, all password: 123456)");
-        System.out.println("  - 6 danh mục, 25 đồ uống");
+        System.out.println("  - 5 danh mục (Sinh tố merged into Sinh tố)");
+        System.out.println("  - 25 đồ uống (9 sinh tố bao gồm cả Sinh tố cũ)");
         System.out.println("  - 10 khách hàng mẫu");
     }
 
