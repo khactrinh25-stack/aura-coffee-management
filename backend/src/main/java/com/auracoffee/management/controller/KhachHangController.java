@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,8 +25,12 @@ public class KhachHangController {
     }
 
     @GetMapping
-    public ResponseEntity<KhachHang> findBySoDienThoai(
-            @RequestParam("soDienThoai") String soDienThoai) {
+    public ResponseEntity<?> findBySoDienThoai(
+            @RequestParam(name = "soDienThoai", required = false) String soDienThoai) {
+        if (soDienThoai == null || soDienThoai.isBlank()) {
+            List<KhachHang> all = khachHangService.findAll();
+            return ResponseEntity.ok(all);
+        }
         Optional<KhachHang> result = khachHangService.findBySoDienThoai(soDienThoai);
         return result.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.ok().build());
