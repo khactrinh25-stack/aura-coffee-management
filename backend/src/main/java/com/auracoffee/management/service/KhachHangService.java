@@ -4,6 +4,7 @@ import com.auracoffee.management.dto.KhachHangRequest;
 import com.auracoffee.management.entity.KhachHang;
 import com.auracoffee.management.repository.KhachHangRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +14,10 @@ public class KhachHangService {
 
     public KhachHangService(KhachHangRepository khachHangRepository) {
         this.khachHangRepository = khachHangRepository;
+    }
+
+    public List<KhachHang> findAll() {
+        return khachHangRepository.findAll();
     }
 
     public Optional<KhachHang> findBySoDienThoai(String soDienThoai) {

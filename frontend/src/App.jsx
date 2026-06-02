@@ -9,6 +9,7 @@ import PagePlaceholder from './components/PagePlaceholder/PagePlaceholder'
 import RevenuePage from './pages/RevenuePage/RevenuePage'
 import SalesManagementPage from './pages/SalesManagementPage/SalesManagementPage'
 import ProductManagementPage from './pages/ProductManagementPage/ProductManagementPage'
+import CustomerManagementPage from './pages/CustomerManagementPage/CustomerManagementPage'
 
 function App() {
   return (
@@ -43,15 +44,7 @@ function App() {
           <Route path="doanh-thu" element={<RevenuePage />} />
           <Route path="do-uong" element={<ProductManagementPage />} />
           <Route path="don-hang" element={<InvoiceListPage />} />
-          <Route
-            path="khach-hang"
-            element={
-              <PagePlaceholder
-                title="Quản lý khách hàng"
-                description="Triển khai theo CUSTOMER_GUIDELINES.md."
-              />
-            }
-          />
+          <Route path="khach-hang" element={<CustomerManagementPage />} />
           <Route
             path="nhan-su"
             element={
