@@ -1,16 +1,14 @@
 import styles from './InvoiceListPage.module.css'
 import { formatVND } from '../../utils/cartUtils'
 
-const parseAttributes = (ghiChu) => {
+const formatAttributes = (ghiChu) => {
   try {
     const attrs = JSON.parse(ghiChu)
-    return [
-      attrs.kichCo ? `Trà sữa ${attrs.kichCo}` : null,
-      attrs.luongDuong ? `${attrs.luongDuong}` : null,
-      attrs.luongDa ? `${attrs.luongDa}` : null,
-    ]
-      .filter(Boolean)
-      .join(', ')
+    const parts = []
+    if (attrs.kichCo) parts.push(attrs.kichCo)
+    if (attrs.luongDuong) parts.push(`Đường ${attrs.luongDuong}`)
+    if (attrs.luongDa) parts.push(`Đá ${attrs.luongDa}`)
+    return parts.join(' · ')
   } catch {
     return ''
   }
@@ -28,11 +26,6 @@ const formatDateTime = (value) => {
 }
 
 function InvoiceDetailPopup({ invoice, onClose }) {
-  const notes = invoice.chiTietList
-    ?.map((item) => parseAttributes(item.ghiChuThuocTinh))
-    .filter(Boolean)
-    .join('\n')
-
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
@@ -59,14 +52,22 @@ function InvoiceDetailPopup({ invoice, onClose }) {
                 </tr>
               </thead>
               <tbody>
-                {invoice.chiTietList?.map((item) => (
-                  <tr key={item.maChiTiet}>
-                    <td>{item.tenDoUong}</td>
-                    <td>{item.soLuong}</td>
-                    <td>{formatVND(item.donGia)}</td>
-                    <td>{formatVND(item.thanhTien)}</td>
-                  </tr>
-                ))}
+                {invoice.chiTietList?.map((item) => {
+                  const attrNote = formatAttributes(item.ghiChuThuocTinh)
+                  return (
+                    <tr key={item.maChiTiet}>
+                      <td>
+                        <span className={styles.itemName}>{item.tenDoUong}</span>
+                        {attrNote && (
+                          <span className={styles.itemNote}>{attrNote}</span>
+                        )}
+                      </td>
+                      <td>{item.soLuong}</td>
+                      <td>{formatVND(item.donGia)}</td>
+                      <td>{formatVND(item.thanhTien)}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -76,16 +77,7 @@ function InvoiceDetailPopup({ invoice, onClose }) {
             <span>{formatVND(invoice.tongTien)}</span>
           </div>
 
-          <div className={styles.noteSection}>
-            <div className={styles.noteLabel}>Ghi Chú:</div>
-            <pre className={styles.noteText}>{notes || 'Không có ghi chú'}</pre>
-          </div>
-
           <div className={styles.detailFooter}>
-            <button type="button" className={styles.printButton} onClick={() => window.print()}>
-              <span className={styles.printIcon}>🖨️</span>
-              In lại
-            </button>
             <button type="button" className={styles.closeButton} onClick={onClose}>
               Đóng
             </button>

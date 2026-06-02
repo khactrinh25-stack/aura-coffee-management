@@ -17,7 +17,7 @@ function ProductArea({ onSelectProduct }) {
         setError(null);
         const [catData, prodData] = await Promise.all([
           apiClient('/danh-muc'),
-          apiClient('/do-uong?trangThai=HOAT_DONG'),
+          apiClient('/do-uong'),
         ]);
         if (cancelled) return;
         setCategories(catData || []);
