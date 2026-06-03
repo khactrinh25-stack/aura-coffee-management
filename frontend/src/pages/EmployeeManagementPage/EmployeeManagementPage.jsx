@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { FaEdit, FaKey, FaLock, FaUnlock, FaSearch } from 'react-icons/fa';
 import { employeeApi } from '../../api/employeeApi';
 import AddEmployeePopup from './components/AddEmployeePopup';
 import EditEmployeePopup from './components/EditEmployeePopup';
@@ -86,17 +87,17 @@ function EmployeeManagementPage() {
       <h1 className={styles.pageTitle}>Quản lý nhân sự</h1>
 
       {/* Toolbar */}
-      <div className={styles.toolbar}>
-        <div className={styles.searchBox}>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Tìm kiếm nhân viên...."
-            value={searchTerm}
-            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-          />
-          <span className={styles.searchIcon}>🔍</span>
-        </div>
+        <div className={styles.toolbar}>
+          <label className={styles.searchBox}>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Tìm kiếm nhân viên..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            />
+            <FaSearch className={styles.searchIcon} />
+          </label>
 
         <select
           className={styles.filterSelect}
@@ -167,21 +168,21 @@ function EmployeeManagementPage() {
                           title="Chỉnh sửa"
                           onClick={() => setEditingEmployee(emp)}
                         >
-                          ✏️
+                          <FaEdit />
                         </button>
                         <button
                           className={styles.iconBtn}
                           title="Cấp lại mật khẩu"
                           onClick={() => setResettingEmployee(emp)}
                         >
-                          🔑
+                          <FaKey />
                         </button>
                         <button
                           className={styles.iconBtn}
                           title={emp.trangThai ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
                           onClick={() => setTogglingEmployee(emp)}
                         >
-                          🔒
+                          {emp.trangThai ? <FaLock /> : <FaUnlock />}
                         </button>
                       </div>
                     </td>

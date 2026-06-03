@@ -161,7 +161,7 @@
 }
 
 .priceCell {
-  font-family: 'Courier New', monospace;
+  font-family: Inter, system-ui, sans-serif;
   font-weight: 600;
   color: #059669;
 }
@@ -205,23 +205,28 @@
 
 .editBtn,
 .deleteBtn {
-  background: none;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 4px 8px;
+  border-radius: 7px;
+  background: #fff;
+  color: #ea580c;
   cursor: pointer;
-  font-size: 16px;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .editBtn:hover {
-  background: #eff6ff;
-  border-color: #93c5fd;
+  border-color: #fed7aa;
+  background: #fff7ed;
 }
 
 .deleteBtn:hover {
+  border-color: #fecaca;
   background: #fef2f2;
-  border-color: #fca5a5;
+  color: #dc2626;
 }
 
 /* Pagination */

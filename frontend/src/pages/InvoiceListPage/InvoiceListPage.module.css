@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .pageTitle {
@@ -37,6 +38,7 @@
   border-radius: 12px;
   border: 1px solid #d1d5db;
   padding: 12px 16px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   color: #111827;
   background: #ffffff;
@@ -46,6 +48,7 @@
   border: none;
   border-radius: 12px;
   padding: 12px 24px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -59,6 +62,7 @@
   border-radius: 12px;
   border: 1px solid #d1d5db;
   padding: 12px 16px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   background: #ffffff;
   color: #111827;
@@ -70,6 +74,7 @@
   padding: 14px 18px;
   border: 1px solid #fecaca;
   border-radius: 12px;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .listContainer {
@@ -103,6 +108,7 @@
 }
 
 .rowValue {
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   color: #111827;
 }
@@ -114,6 +120,7 @@
   border-radius: 12px;
   background: #111827;
   color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 18px;
   cursor: pointer;
   display: inline-flex;
@@ -126,6 +133,7 @@
   padding: 32px 0;
   text-align: center;
   color: #6b7280;
+  font-family: Inter, system-ui, sans-serif;
 }
 
 .popupOverlay {
@@ -156,6 +164,7 @@
   border-radius: 999px;
   background: #f8c165;
   color: #111827;
+  font-family: Inter, system-ui, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -170,6 +179,7 @@
   gap: 8px;
   align-items: center;
   margin-bottom: 12px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   color: #111827;
 }
@@ -200,6 +210,7 @@
 .popupTable th,
 .popupTable td {
   padding: 12px 10px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   color: #111827;
   border-bottom: 1px solid #e5e7eb;
@@ -249,6 +260,7 @@
   border: none;
   border-radius: 12px;
   padding: 12px 24px;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;

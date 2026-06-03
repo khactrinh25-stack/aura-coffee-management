@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import { beverageApi } from '../../api/beverageApi';
 import { danhMucApi } from '../../api/danhMucApi';
 import AddProductPopup from './components/AddProductPopup';
@@ -150,7 +151,7 @@ function ProductManagementPage() {
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             onKeyDown={handleSearchKeyDown}
           />
-          <span className={styles.searchIcon}>🔍</span>
+            <FaSearch className={styles.searchIcon} />
         </div>
 
         <select
@@ -233,7 +234,7 @@ function ProductManagementPage() {
                             title="Chỉnh sửa"
                             onClick={() => setEditingBeverage(b)}
                           >
-                            ✏️
+                            <FaEdit />
                           </button>
                           {b.trangThai !== 'NGUNG_KINH_DOANH' && (
                             <button
@@ -241,7 +242,7 @@ function ProductManagementPage() {
                               title="Ngưng kinh doanh"
                               onClick={() => setDeletingBeverage(b)}
                             >
-                              🗑️
+                              <FaTrash />
                             </button>
                           )}
                         </div>
