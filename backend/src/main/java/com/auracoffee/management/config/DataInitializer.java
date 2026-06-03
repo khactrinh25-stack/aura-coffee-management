@@ -187,13 +187,13 @@ public class DataInitializer implements CommandLineRunner {
             saveDoUong("ST009", "Sinh tố ổi",          38000, dm3.getMaDanhMuc(), "CON_HANG");
 
             // --- Đá xay (maDanhMuc = dm4) ---
-            saveDoUong("DX001", "Cà phê đá xay",       49000, dm4.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("DX001", "Oreo đá xay",       49000, dm4.getMaDanhMuc(), "CON_HANG");
             saveDoUong("DX002", "Cookies & Cream",      55000, dm4.getMaDanhMuc(), "CON_HANG");
             saveDoUong("DX003", "Matcha đá xay",       52000, dm4.getMaDanhMuc(), "CON_HANG");
 
             // --- Cacao & Socola (maDanhMuc = dm5) ---
             saveDoUong("CS001", "Cacao nóng",          35000, dm5.getMaDanhMuc(), "CON_HANG");
-            saveDoUong("CS002", "Socola đá xay",       45000, dm5.getMaDanhMuc(), "CON_HANG");
+            saveDoUong("CS002", "Mocha",       45000, dm5.getMaDanhMuc(), "CON_HANG");
             saveDoUong("CS003", "Socola latte",        42000, dm5.getMaDanhMuc(), "CON_HANG");
         } else {
             System.out.println("  - DO_UONG: already exists, skipping");

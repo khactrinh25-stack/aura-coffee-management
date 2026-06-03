@@ -108,7 +108,7 @@ function ProductArea({ onSelectProduct }) {
           >
             <div className={styles.productImage}>
               <img
-                src={getDrinkImage(product.tenDoUong)}
+                src={getDrinkImage(product.tenDanhMuc)}
                 alt={product.tenDoUong}
                 className={styles.productImageTag}
                 onError={(e) => {

@@ -62,8 +62,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 18px;
+  padding: 12px;
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   background: #ffffff;
@@ -79,14 +78,13 @@
 }
 
 .productImage {
-  width: 150px;
-  height: 110px;
+  width: 160px;
+  height: 155px;
   border-radius: 8px;
   background: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
 }
 
 .productImageTag {
@@ -108,7 +106,7 @@
 }
 
 .productName {
-  margin: 0;
+  margin: auto 0 0;
   font-size: 16px;
   font-weight: 700;
   color: #0f172a;
