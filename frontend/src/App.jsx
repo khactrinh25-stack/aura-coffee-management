@@ -5,11 +5,11 @@ import EmployeeLayout from './layouts/EmployeeLayout'
 import AccountSettingsPage from './pages/AccountSettingsPage/AccountSettingsPage'
 import InvoiceListPage from './pages/InvoiceListPage/InvoiceListPage'
 import LoginPage from './pages/LoginPage/LoginPage'
-import PagePlaceholder from './components/PagePlaceholder/PagePlaceholder'
 import RevenuePage from './pages/RevenuePage/RevenuePage'
 import SalesManagementPage from './pages/SalesManagementPage/SalesManagementPage'
 import ProductManagementPage from './pages/ProductManagementPage/ProductManagementPage'
 import CustomerManagementPage from './pages/CustomerManagementPage/CustomerManagementPage'
+import EmployeeManagementPage from './pages/EmployeeManagementPage/EmployeeManagementPage'
 
 function App() {
   return (
@@ -45,15 +45,7 @@ function App() {
           <Route path="do-uong" element={<ProductManagementPage />} />
           <Route path="don-hang" element={<InvoiceListPage />} />
           <Route path="khach-hang" element={<CustomerManagementPage />} />
-          <Route
-            path="nhan-su"
-            element={
-              <PagePlaceholder
-                title="Quản lý nhân sự"
-                description="Triển khai theo EMPLOYEE_GUIDELINES.md."
-              />
-            }
-          />
+          <Route path="nhan-su" element={<EmployeeManagementPage />} />
           <Route path="cai-dat" element={<AccountSettingsPage />} />
         </Route>
 

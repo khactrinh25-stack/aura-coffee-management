@@ -30,8 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/api/do-uong",
             "/api/danh-muc",
             "/api/khach-hang",
-            "/api/hoa-don"
-    );
+            "/api/hoa-don",
+            "/api/nhan-vien");
 
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
@@ -43,8 +43,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
