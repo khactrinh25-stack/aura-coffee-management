@@ -13,6 +13,8 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
 
 	Optional<NhanVien> findByTenDangNhap(String tenDangNhap);
 
+	Optional<NhanVien> findBySoDienThoai(String soDienThoai);
+
 	@Query("SELECT n FROM NhanVien n WHERE " +
 			"(:search IS NULL OR LOWER(n.tenDangNhap) LIKE LOWER(CONCAT('%', :search, '%')) " +
 			"OR LOWER(n.hoTen) LIKE LOWER(CONCAT('%', :search, '%')) " +

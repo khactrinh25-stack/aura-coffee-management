@@ -45,6 +45,13 @@ public class NhanVienService {
             throw new IllegalArgumentException("Tên đăng nhập đã tồn tại trong hệ thống");
         }
 
+        // Check duplicate phone number
+        if (request.getSoDienThoai() != null && !request.getSoDienThoai().trim().isEmpty()) {
+            if (nhanVienRepository.findBySoDienThoai(request.getSoDienThoai().trim()).isPresent()) {
+                throw new IllegalArgumentException("Số điện thoại đã tồn tại trong hệ thống");
+            }
+        }
+
         NhanVien nv = new NhanVien();
         nv.setTenDangNhap(request.getTenDangNhap().trim());
         nv.setMatKhau(passwordEncoder.encode(request.getMatKhau()));
@@ -69,10 +76,17 @@ public class NhanVienService {
             nv.setTenDangNhap(request.getTenDangNhap().trim());
         }
 
+        // Check duplicate phone number if changed
+        if (request.getSoDienThoai() != null && !request.getSoDienThoai().trim().equals(nv.getSoDienThoai())) {
+            if (!request.getSoDienThoai().trim().isEmpty()
+                    && nhanVienRepository.findBySoDienThoai(request.getSoDienThoai().trim()).isPresent()) {
+                throw new IllegalArgumentException("Số điện thoại đã tồn tại trong hệ thống");
+            }
+            nv.setSoDienThoai(request.getSoDienThoai().trim());
+        }
+
         if (request.getHoTen() != null)
             nv.setHoTen(request.getHoTen());
-        if (request.getSoDienThoai() != null)
-            nv.setSoDienThoai(request.getSoDienThoai());
         if (request.getVaiTro() != null)
             nv.setVaiTro(request.getVaiTro());
 
