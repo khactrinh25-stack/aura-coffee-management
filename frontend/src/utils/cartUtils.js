@@ -86,9 +86,9 @@ export const calcSubtotal = (cart) =>
 export const calcEarnedPoints = (subtotal) => Math.floor(subtotal / 1000);
 
 /**
- * Tính số tiền giảm khi dùng điểm: 1 điểm = 10đ
+ * Tính số tiền giảm khi dùng điểm: 1 điểm = 100đ
  */
-export const calcDiscountFromPoints = (diemSuDung) => diemSuDung * 10;
+export const calcDiscountFromPoints = (diemSuDung) => diemSuDung * 100;
 
 /**
  * Tính tổng cộng sau giảm điểm
