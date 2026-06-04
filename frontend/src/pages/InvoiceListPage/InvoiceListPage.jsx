@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { apiClient } from '../../api/apiClient'
 import { formatVND } from '../../utils/cartUtils'
+import { getNhanVienSession } from '../../utils/session'
 import InvoiceDetailPopup from './InvoiceDetailPopup'
 import styles from './InvoiceListPage.module.css'
 
@@ -43,6 +44,9 @@ function InvoiceListPage() {
   const [error, setError] = useState('')
   const [selectedInvoice, setSelectedInvoice] = useState(null)
 
+  const session = getNhanVienSession()
+  const isAdmin = session?.vaiTro === 'Admin'
+
   useEffect(() => {
     const fetchInvoices = async () => {
       setLoading(true)
@@ -76,66 +80,68 @@ function InvoiceListPage() {
     <div className={styles.pageWrapper}>
       <h1 className={styles.pageTitle}>Quản lý lưu trữ hóa đơn</h1>
 
-      <div className={styles.searchPanel}>
-        <div className={styles.dateFilterGroup}>
-          <div className={styles.dateInputWrapper}>
-            <label className={styles.dateLabel}>Từ ngày</label>
-            <input
-              type="date"
-              className={styles.dateInput}
-              value={startDate}
-              max={getTodayString()}
-              onChange={(e) => {
-                setStartDate(e.target.value)
-                if (endDate && e.target.value > endDate) {
-                  setEndDate(e.target.value)
-                }
-              }}
-            />
-          </div>
-          <div className={styles.dateInputWrapper}>
-            <label className={styles.dateLabel}>Đến ngày</label>
-            <input
-              type="date"
-              className={styles.dateInput}
-              value={endDate}
-              min={startDate || undefined}
-              max={getTodayString()}
-              onChange={(e) => {
-                setEndDate(e.target.value)
-                if (startDate && e.target.value < startDate) {
+      {isAdmin && (
+        <div className={styles.searchPanel}>
+          <div className={styles.dateFilterGroup}>
+            <div className={styles.dateInputWrapper}>
+              <label className={styles.dateLabel}>Từ ngày</label>
+              <input
+                type="date"
+                className={styles.dateInput}
+                value={startDate}
+                max={getTodayString()}
+                onChange={(e) => {
                   setStartDate(e.target.value)
-                }
-              }}
-            />
+                  if (endDate && e.target.value > endDate) {
+                    setEndDate(e.target.value)
+                  }
+                }}
+              />
+            </div>
+            <div className={styles.dateInputWrapper}>
+              <label className={styles.dateLabel}>Đến ngày</label>
+              <input
+                type="date"
+                className={styles.dateInput}
+                value={endDate}
+                min={startDate || undefined}
+                max={getTodayString()}
+                onChange={(e) => {
+                  setEndDate(e.target.value)
+                  if (startDate && e.target.value < startDate) {
+                    setStartDate(e.target.value)
+                  }
+                }}
+              />
+            </div>
+            {(startDate || endDate || filterMethod) && (
+              <button
+                type="button"
+                className={styles.clearButton}
+                onClick={() => {
+                  setStartDate('')
+                  setEndDate('')
+                  setFilterMethod('')
+                }}
+              >
+                Xoá bộ lọc
+              </button>
+            )}
           </div>
-          {(startDate || endDate || filterMethod) && (
-            <button
-              type="button"
-              className={styles.clearButton}
-              onClick={() => {
-                setStartDate('')
-                setEndDate('')
-                setFilterMethod('')
-              }}
-            >
-              Xoá bộ lọc
-            </button>
-          )}
-        </div>
 
-        <select
-          className={styles.filterSelect}
-          value={filterMethod}
-          onChange={(e) => setFilterMethod(e.target.value)}
-        >
-          {PAYMENT_METHODS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+          <select
+            className={styles.filterSelect}
+            value={filterMethod}
+            onChange={(e) => setFilterMethod(e.target.value)}
+          >
+            {PAYMENT_METHODS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {error && <div className={styles.errorBox}>{error}</div>}
 
