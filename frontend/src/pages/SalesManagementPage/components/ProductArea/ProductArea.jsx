@@ -37,9 +37,12 @@ function ProductArea({ onSelectProduct }) {
     };
   }, []);
 
+  // Only show products that are in stock (CON_HANG) for sales
+  const saleableProducts = products.filter((p) => p.trangThai === 'CON_HANG');
+
   const filteredProducts = activeCategory
-    ? products.filter((p) => p.maDanhMuc === activeCategory)
-    : products;
+    ? saleableProducts.filter((p) => p.maDanhMuc === activeCategory)
+    : saleableProducts;
 
   const handleCategoryClick = (maDanhMuc) => {
     setActiveCategory((prev) => (prev === maDanhMuc ? null : maDanhMuc));
