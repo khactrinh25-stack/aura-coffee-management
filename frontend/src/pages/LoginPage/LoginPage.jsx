@@ -6,6 +6,7 @@ import {
   getNhanVienSession,
   saveNhanVienSession,
 } from '../../utils/session'
+import Icon from '../../components/Icon'
 import styles from './LoginPage.module.css'
 
 function LoginPage() {
@@ -15,6 +16,7 @@ function LoginPage() {
   const [passwordError, setPasswordError] = useState('')
   const [submitError, setSubmitError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     const session = getNhanVienSession()
@@ -91,19 +93,34 @@ function LoginPage() {
             <label className={styles.label} htmlFor="password">
               Mật khẩu
             </label>
-            <input
-              id="password"
-              className={styles.input}
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              placeholder="Mật khẩu"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value)
-                if (passwordError) setPasswordError('')
-              }}
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                id="password"
+                className={styles.passwordInput}
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                autoComplete="current-password"
+                placeholder="Mật khẩu"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value)
+                  if (passwordError) setPasswordError('')
+                }}
+              />
+              <button
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                tabIndex={-1}
+              >
+                <Icon
+                  name={showPassword ? 'eyeOff' : 'eye'}
+                  size={20}
+                  color="#9ca3af"
+                />
+              </button>
+            </div>
             {passwordError ? (
               <p className={styles.error} role="alert">
                 {passwordError}
