@@ -48,6 +48,15 @@ public class HoaDonService {
 
     @Transactional
     public HoaDonResponse create(HoaDonRequest request) {
+        // Validate that all products in the invoice are in stock (CON_HANG)
+        for (ChiTietHoaDonRequest ctRequest : request.getChiTietList()) {
+            DoUong product = doUongRepository.findById(ctRequest.getMaDoUong())
+                    .orElseThrow(() -> new RuntimeException("Sản phẩm với mã " + ctRequest.getMaDoUong() + " không tồn tại"));
+            if (!"CON_HANG".equals(product.getTrangThai())) {
+                throw new RuntimeException("Sản phẩm \"" + product.getTenDoUong() + "\" đã ngừng kinh doanh hoặc hết hàng. Vui lòng xóa khỏi giỏ hàng và làm mới trang.");
+            }
+        }
+
         HoaDon hoaDon = new HoaDon();
         hoaDon.setNgayTao(LocalDateTime.now());
         hoaDon.setTongTien(request.getTongTien());
