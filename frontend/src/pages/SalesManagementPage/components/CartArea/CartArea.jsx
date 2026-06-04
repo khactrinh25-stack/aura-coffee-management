@@ -16,6 +16,7 @@ function CartArea({
   onClearCart,
   onPay,
   onFoundCustomer,
+  customerPopupActive = false,
 }) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [customer, setCustomer] = useState(null);
@@ -40,12 +41,14 @@ function CartArea({
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [isCartEmpty]);
 
-  // Debounced phone lookup
+  // Debounced phone lookup - only trigger when exactly 10 digits
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    if (!phoneNumber.trim() || phoneNumber.trim().length < 7) {
+    const cleaned = phoneNumber.trim();
+    // Only search when exactly 10 digits are entered (Vietnamese phone number)
+    if (cleaned.length !== 10) {
       setCustomer(null);
       setPointMode('earn');
       setDiemSuDung(0);
@@ -55,7 +58,7 @@ function CartArea({
 
     debounceRef.current = setTimeout(() => {
       apiClient(
-        `/khach-hang?soDienThoai=${encodeURIComponent(phoneNumber.trim())}`
+        `/khach-hang?soDienThoai=${encodeURIComponent(cleaned)}`
       ).then((data) => {
         if (data) {
           setCustomer(data);
@@ -67,11 +70,11 @@ function CartArea({
         } else {
           // Phone not found -> will trigger NotFound popup from parent
           setCustomer(null);
-          onFoundCustomer(null, phoneNumber.trim());
+          onFoundCustomer(null, cleaned);
         }
       }).catch(() => {
         setCustomer(null);
-        onFoundCustomer(null, phoneNumber.trim());
+        onFoundCustomer(null, cleaned);
       });
     }, 500);
 
@@ -83,7 +86,9 @@ function CartArea({
   // onFoundCustomer is stable callback from parent
 
   const handlePhoneChange = (value) => {
-    setPhoneNumber(value);
+    // Only allow digits (0-9), max 10 characters
+    const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+    setPhoneNumber(digitsOnly);
     setError('');
   };
 
@@ -138,7 +143,7 @@ function CartArea({
           placeholder="Nhập SĐT khách hàng..."
           value={phoneNumber}
           onChange={(e) => handlePhoneChange(e.target.value)}
-          disabled={isCartEmpty}
+          disabled={isCartEmpty || customerPopupActive}
         />
       </div>
 
