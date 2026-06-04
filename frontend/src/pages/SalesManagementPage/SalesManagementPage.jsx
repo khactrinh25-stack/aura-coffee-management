@@ -185,6 +185,7 @@ function SalesManagementPage() {
             onClearCart={handleClearCart}
             onPay={handlePay}
             onFoundCustomer={handleFoundCustomer}
+            customerPopupActive={showNotFoundPopup || showNewCustomerPopup}
           />
 
           {/* Error from submit */}
