@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface DoUongRepository extends JpaRepository<DoUong, Integer> {
 
+    List<DoUong> findAllByOrderByMaDoUongAsc();
+
     List<DoUong> findByTrangThai(String trangThai);
 
     List<DoUong> findByTrangThaiAndMaDanhMuc(String trangThai, Integer maDanhMuc);

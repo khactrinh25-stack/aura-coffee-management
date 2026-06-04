@@ -72,7 +72,7 @@ function InvoiceListPage() {
   }, [filterMethod, startDate, endDate])
 
   const sortedInvoices = useMemo(
-    () => [...invoices].sort((a, b) => new Date(b.ngayTao) - new Date(a.ngayTao)),
+    () => [...invoices].sort((a, b) => a.maHoaDon - b.maHoaDon),
     [invoices]
   )
 

@@ -9,7 +9,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer> {
 
     Optional<KhachHang> findBySoDienThoai(String soDienThoai);
 
-    List<KhachHang> findByDaXoaFalse();
+    List<KhachHang> findByDaXoaFalseOrderByMaKhachHangAsc();
 
     Optional<KhachHang> findBySoDienThoaiAndDaXoaFalse(String soDienThoai);
 }

@@ -17,7 +17,7 @@ public class KhachHangService {
     }
 
     public List<KhachHang> findAll() {
-        return khachHangRepository.findByDaXoaFalse();
+        return khachHangRepository.findByDaXoaFalseOrderByMaKhachHangAsc();
     }
 
     public Optional<KhachHang> findBySoDienThoai(String soDienThoai) {

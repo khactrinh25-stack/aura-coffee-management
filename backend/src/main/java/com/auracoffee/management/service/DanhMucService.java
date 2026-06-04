@@ -15,6 +15,6 @@ public class DanhMucService {
     }
 
     public List<DanhMuc> getAll() {
-        return danhMucRepository.findAll();
+        return danhMucRepository.findAllByOrderByMaDanhMucAsc();
     }
 }

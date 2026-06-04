@@ -12,7 +12,7 @@ const emptyForm = {
 };
 
 function getCustomerCode(maKhachHang) {
-  return `KH${String(maKhachHang ?? '').padStart(3, '0')}`;
+  return maKhachHang;
 }
 
 function CustomerFormModal({ customer, onClose, onSuccess }) {

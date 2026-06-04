@@ -30,12 +30,15 @@ public class DoUongService {
         } else if (trangThai != null) {
             entities = doUongRepository.findByTrangThai(trangThai);
         } else if (maDanhMuc != null) {
-            entities = doUongRepository.findAll().stream()
+            entities = doUongRepository.findAllByOrderByMaDoUongAsc().stream()
                     .filter(d -> maDanhMuc.equals(d.getMaDanhMuc()))
                     .collect(Collectors.toList());
         } else {
-            entities = doUongRepository.findAll();
+            entities = doUongRepository.findAllByOrderByMaDoUongAsc();
         }
+
+        // Sort all results by maDoUong ascending
+        entities.sort((a, b) -> a.getMaDoUong().compareTo(b.getMaDoUong()));
 
         Map<Integer, String> danhMucMap = danhMucRepository.findAll().stream()
                 .collect(Collectors.toMap(DanhMuc::getMaDanhMuc, DanhMuc::getTenDanhMuc));
