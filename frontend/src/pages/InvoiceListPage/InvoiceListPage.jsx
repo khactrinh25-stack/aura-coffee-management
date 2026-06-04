@@ -43,35 +43,29 @@ function InvoiceListPage() {
   const [error, setError] = useState('')
   const [selectedInvoice, setSelectedInvoice] = useState(null)
 
-  const fetchInvoices = async (method, start, end) => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const params = new URLSearchParams()
-      if (method) params.append('phuongThucThanhToan', method)
-      if (start) params.append('startDate', start)
-      if (end) params.append('endDate', end)
-
-      const query = params.toString() ? `?${params.toString()}` : ''
-      const data = await apiClient(`/hoa-don${query}`)
-      setInvoices(data)
-    } catch (err) {
-      setError(err.message || 'Không thể tải danh sách hóa đơn. Vui lòng thử lại.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
-    fetchInvoices(filterMethod, '', '')
-    setStartDate('')
-    setEndDate('')
-  }, [filterMethod])
+    const fetchInvoices = async () => {
+      setLoading(true)
+      setError('')
 
-  const handleFilter = () => {
-    fetchInvoices(filterMethod, startDate, endDate)
-  }
+      try {
+        const params = new URLSearchParams()
+        if (filterMethod) params.append('phuongThucThanhToan', filterMethod)
+        if (startDate) params.append('startDate', startDate)
+        if (endDate) params.append('endDate', endDate)
+
+        const query = params.toString() ? `?${params.toString()}` : ''
+        const data = await apiClient(`/hoa-don${query}`)
+        setInvoices(data)
+      } catch (err) {
+        setError(err.message || 'Không thể tải danh sách hóa đơn. Vui lòng thử lại.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchInvoices()
+  }, [filterMethod, startDate, endDate])
 
   const sortedInvoices = useMemo(
     () => [...invoices].sort((a, b) => new Date(b.ngayTao) - new Date(a.ngayTao)),
@@ -90,8 +84,13 @@ function InvoiceListPage() {
               type="date"
               className={styles.dateInput}
               value={startDate}
-              max={endDate || getTodayString()}
-              onChange={(e) => setStartDate(e.target.value)}
+              max={getTodayString()}
+              onChange={(e) => {
+                setStartDate(e.target.value)
+                if (endDate && e.target.value > endDate) {
+                  setEndDate(e.target.value)
+                }
+              }}
             />
           </div>
           <div className={styles.dateInputWrapper}>
@@ -100,18 +99,29 @@ function InvoiceListPage() {
               type="date"
               className={styles.dateInput}
               value={endDate}
-              min={startDate}
+              min={startDate || undefined}
               max={getTodayString()}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) => {
+                setEndDate(e.target.value)
+                if (startDate && e.target.value < startDate) {
+                  setStartDate(e.target.value)
+                }
+              }}
             />
           </div>
-          <button
-            type="button"
-            className={styles.searchButton}
-            onClick={handleFilter}
-          >
-            Lọc
-          </button>
+          {(startDate || endDate || filterMethod) && (
+            <button
+              type="button"
+              className={styles.clearButton}
+              onClick={() => {
+                setStartDate('')
+                setEndDate('')
+                setFilterMethod('')
+              }}
+            >
+              Xoá bộ lọc
+            </button>
+          )}
         </div>
 
         <select

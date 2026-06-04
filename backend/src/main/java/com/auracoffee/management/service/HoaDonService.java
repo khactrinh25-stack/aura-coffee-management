@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.auracoffee.management.dto.RevenueReportItem;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -116,13 +115,14 @@ public class HoaDonService {
             if (startDate.isAfter(endDate)) {
                 throw new IllegalArgumentException("Start date must be before or equal to end date");
             }
+            // Use [from, to+1day) range to avoid SQL Server datetime precision issues
             LocalDateTime from = startDate.atStartOfDay();
-            LocalDateTime to = endDate.atTime(LocalTime.MAX);
+            LocalDateTime to = endDate.plusDays(1).atStartOfDay();
 
             if (hasPaymentMethod) {
-                hoaDons = hoaDonRepository.findAllByNgayTaoBetweenAndPhuongThucThanhToanOrderByNgayTaoDesc(from, to, phuongThucThanhToan);
+                hoaDons = hoaDonRepository.findAllByNgayTaoBetweenAndPhuongThucThanhToan(from, to, phuongThucThanhToan);
             } else {
-                hoaDons = hoaDonRepository.findAllByNgayTaoBetweenOrderByNgayTaoDesc(from, to);
+                hoaDons = hoaDonRepository.findAllByNgayTaoBetween(from, to);
             }
         } else if (hasPaymentMethod) {
             hoaDons = hoaDonRepository.findAllByPhuongThucThanhToanOrderByNgayTaoDesc(phuongThucThanhToan);
@@ -162,10 +162,11 @@ public class HoaDonService {
             throw new IllegalArgumentException("Date range must not exceed 365 days");
         }
 
+        // Use [from, to+1day) range to avoid SQL Server datetime precision issues
         LocalDateTime from = startDate.atStartOfDay();
-        LocalDateTime to = endDate.atTime(LocalTime.MAX);
+        LocalDateTime to = endDate.plusDays(1).atStartOfDay();
 
-        List<HoaDon> hoaDons = hoaDonRepository.findAllByNgayTaoBetweenOrderByNgayTaoDesc(from, to);
+        List<HoaDon> hoaDons = hoaDonRepository.findAllByNgayTaoBetween(from, to);
         if (hoaDons.isEmpty()) {
             return Collections.emptyList();
         }
