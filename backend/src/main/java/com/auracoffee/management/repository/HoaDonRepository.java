@@ -10,4 +10,5 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
     List<HoaDon> findAllByOrderByNgayTaoDesc();
     List<HoaDon> findAllByPhuongThucThanhToanOrderByNgayTaoDesc(String phuongThucThanhToan);
     List<HoaDon> findAllByNgayTaoBetweenOrderByNgayTaoDesc(LocalDateTime from, LocalDateTime to);
+    List<HoaDon> findAllByNgayTaoBetweenAndPhuongThucThanhToanOrderByNgayTaoDesc(LocalDateTime from, LocalDateTime to, String phuongThucThanhToan);
 }

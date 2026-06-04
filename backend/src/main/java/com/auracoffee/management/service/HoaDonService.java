@@ -106,9 +106,25 @@ public class HoaDonService {
         }
     }
 
-    public List<HoaDonResponse> getAll(String phuongThucThanhToan, String vaiTro, Integer maNhanVien) {
+    public List<HoaDonResponse> getAll(String phuongThucThanhToan, String vaiTro, Integer maNhanVien, LocalDate startDate, LocalDate endDate) {
         List<HoaDon> hoaDons;
-        if (phuongThucThanhToan != null && !phuongThucThanhToan.isBlank()) {
+
+        boolean hasDateRange = startDate != null && endDate != null;
+        boolean hasPaymentMethod = phuongThucThanhToan != null && !phuongThucThanhToan.isBlank();
+
+        if (hasDateRange) {
+            if (startDate.isAfter(endDate)) {
+                throw new IllegalArgumentException("Start date must be before or equal to end date");
+            }
+            LocalDateTime from = startDate.atStartOfDay();
+            LocalDateTime to = endDate.atTime(LocalTime.MAX);
+
+            if (hasPaymentMethod) {
+                hoaDons = hoaDonRepository.findAllByNgayTaoBetweenAndPhuongThucThanhToanOrderByNgayTaoDesc(from, to, phuongThucThanhToan);
+            } else {
+                hoaDons = hoaDonRepository.findAllByNgayTaoBetweenOrderByNgayTaoDesc(from, to);
+            }
+        } else if (hasPaymentMethod) {
             hoaDons = hoaDonRepository.findAllByPhuongThucThanhToanOrderByNgayTaoDesc(phuongThucThanhToan);
         } else {
             hoaDons = hoaDonRepository.findAllByOrderByNgayTaoDesc();

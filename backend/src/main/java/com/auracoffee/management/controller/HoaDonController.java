@@ -37,11 +37,28 @@ public class HoaDonController {
     @GetMapping
     public ResponseEntity<List<HoaDonResponse>> getAll(
             @RequestParam(required = false) String phuongThucThanhToan,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
             HttpServletRequest request
     ) {
         String vaiTro = (String) request.getAttribute("vaiTro");
         Integer maNhanVien = (Integer) request.getAttribute("maNhanVien");
-        return ResponseEntity.ok(hoaDonService.getAll(phuongThucThanhToan, vaiTro, maNhanVien));
+
+        LocalDate start = null;
+        LocalDate end = null;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDate.parse(startDate);
+                end = LocalDate.parse(endDate);
+            } catch (DateTimeParseException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid start date or end date");
+            }
+            if (start.isAfter(end)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start date must be before or equal to end date");
+            }
+        }
+
+        return ResponseEntity.ok(hoaDonService.getAll(phuongThucThanhToan, vaiTro, maNhanVien, start, end));
     }
 
     @GetMapping("/report")

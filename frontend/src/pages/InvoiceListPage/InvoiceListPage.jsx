@@ -26,66 +26,91 @@ const formatDateTime = (value) => {
   }).format(new Date(value))
 }
 
+const getTodayString = () => {
+  const d = new Date()
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 function InvoiceListPage() {
   const [invoices, setInvoices] = useState([])
   const [filterMethod, setFilterMethod] = useState('')
-  const [searchCode, setSearchCode] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [selectedInvoice, setSelectedInvoice] = useState(null)
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      setLoading(true)
-      setError('')
+  const fetchInvoices = async (method, start, end) => {
+    setLoading(true)
+    setError('')
 
-      try {
-        const query = filterMethod ? `?phuongThucThanhToan=${encodeURIComponent(filterMethod)}` : ''
-        const data = await apiClient(`/hoa-don${query}`)
-        setInvoices(data)
-      } catch (err) {
-        setError(err.message || 'Không thể tải danh sách hóa đơn. Vui lòng thử lại.')
-      } finally {
-        setLoading(false)
-      }
+    try {
+      const params = new URLSearchParams()
+      if (method) params.append('phuongThucThanhToan', method)
+      if (start) params.append('startDate', start)
+      if (end) params.append('endDate', end)
+
+      const query = params.toString() ? `?${params.toString()}` : ''
+      const data = await apiClient(`/hoa-don${query}`)
+      setInvoices(data)
+    } catch (err) {
+      setError(err.message || 'Không thể tải danh sách hóa đơn. Vui lòng thử lại.')
+    } finally {
+      setLoading(false)
     }
+  }
 
-    fetchInvoices()
+  useEffect(() => {
+    fetchInvoices(filterMethod, '', '')
+    setStartDate('')
+    setEndDate('')
   }, [filterMethod])
+
+  const handleFilter = () => {
+    fetchInvoices(filterMethod, startDate, endDate)
+  }
 
   const sortedInvoices = useMemo(
     () => [...invoices].sort((a, b) => new Date(b.ngayTao) - new Date(a.ngayTao)),
     [invoices]
   )
 
-  const filteredInvoices = useMemo(() => {
-    const normalizedSearch = searchCode.trim().toLowerCase()
-    if (!normalizedSearch) return sortedInvoices
-
-    return sortedInvoices.filter((invoice) =>
-      invoice.maHoaDon?.toString().toLowerCase().includes(normalizedSearch)
-    )
-  }, [searchCode, sortedInvoices])
-
   return (
     <div className={styles.pageWrapper}>
       <h1 className={styles.pageTitle}>Quản lý lưu trữ hóa đơn</h1>
 
       <div className={styles.searchPanel}>
-        <div className={styles.searchInputGroup}>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Tìm mã hóa đơn..."
-            value={searchCode}
-            onChange={(e) => setSearchCode(e.target.value)}
-          />
+        <div className={styles.dateFilterGroup}>
+          <div className={styles.dateInputWrapper}>
+            <label className={styles.dateLabel}>Từ ngày</label>
+            <input
+              type="date"
+              className={styles.dateInput}
+              value={startDate}
+              max={endDate || getTodayString()}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+          <div className={styles.dateInputWrapper}>
+            <label className={styles.dateLabel}>Đến ngày</label>
+            <input
+              type="date"
+              className={styles.dateInput}
+              value={endDate}
+              min={startDate}
+              max={getTodayString()}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
           <button
             type="button"
             className={styles.searchButton}
-            onClick={() => setSearchCode(searchCode.trim())}
+            onClick={handleFilter}
           >
-            Tìm kiếm
+            Lọc
           </button>
         </div>
 
@@ -115,10 +140,10 @@ function InvoiceListPage() {
 
         {loading ? (
           <div className={styles.emptyState}>Đang tải hóa đơn...</div>
-        ) : filteredInvoices.length === 0 ? (
+        ) : sortedInvoices.length === 0 ? (
           <div className={styles.emptyState}>Không có hóa đơn để hiển thị.</div>
         ) : (
-          filteredInvoices.map((invoice) => (
+          sortedInvoices.map((invoice) => (
             <div key={invoice.maHoaDon} className={styles.listRow}>
               <span className={styles.rowValue}>{invoice.maHoaDon}</span>
               <span className={styles.rowValue}>{formatDateTime(invoice.ngayTao)}</span>
