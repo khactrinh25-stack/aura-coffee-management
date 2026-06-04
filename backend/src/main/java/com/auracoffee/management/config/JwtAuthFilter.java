@@ -122,8 +122,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } else {
-            // PUT, PATCH, DELETE: Admin only
-            if (!"Admin".equals(vaiTro)) {
+            // PUT /api/auth/* (change-password, update-profile): Both Admin and NhanVien
+            if (path.startsWith("/api/auth/")) {
+                // Allow both roles to update their own profile/password
+            } else if (!"Admin".equals(vaiTro)) {
+                // PUT, PATCH, DELETE for other paths: Admin only
                 sendForbidden(response, "Chỉ Admin mới có quyền thực hiện thao tác này");
                 return;
             }

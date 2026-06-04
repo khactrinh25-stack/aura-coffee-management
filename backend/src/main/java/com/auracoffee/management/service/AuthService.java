@@ -8,6 +8,7 @@ import com.auracoffee.management.dto.ChangePasswordRequest;
 import com.auracoffee.management.dto.LoginRequest;
 import com.auracoffee.management.dto.LoginResponse;
 import com.auracoffee.management.dto.MessageResponse;
+import com.auracoffee.management.dto.UpdateProfileRequest;
 import com.auracoffee.management.entity.NhanVien;
 import com.auracoffee.management.exception.UnauthorizedException;
 import com.auracoffee.management.repository.NhanVienRepository;
@@ -49,6 +50,47 @@ public class AuthService {
 				nhanVien.getVaiTro());
 
 		return LoginResponse.from(nhanVien, token);
+	}
+
+	public MessageResponse updateProfile(UpdateProfileRequest request) {
+		if (request.getMatKhauMoi() != null && !request.getMatKhauMoi().isEmpty()) {
+			if (!request.getMatKhauMoi().equals(request.getXacNhanMatKhauMoi())) {
+				throw new IllegalArgumentException("Mật khẩu xác nhận không khớp");
+			}
+			if (request.getMatKhauMoi().length() < 6) {
+				throw new IllegalArgumentException("Mật khẩu mới phải có ít nhất 6 ký tự");
+			}
+		}
+
+		NhanVien nhanVien = nhanVienRepository.findById(request.getMaNhanVien())
+				.orElseThrow(() -> new UnauthorizedException("Không tìm thấy tài khoản"));
+
+		if (!matchesPassword(request.getMatKhauCu(), nhanVien.getMatKhau())) {
+			throw new UnauthorizedException("Mật khẩu hiện tại không đúng");
+		}
+
+		// Update phone number if changed
+		if (request.getSoDienThoai() != null
+				&& !request.getSoDienThoai().trim().equals(nhanVien.getSoDienThoai())) {
+			if (!request.getSoDienThoai().trim().isEmpty()
+					&& nhanVienRepository.findBySoDienThoai(request.getSoDienThoai().trim()).isPresent()) {
+				throw new IllegalArgumentException("Số điện thoại đã tồn tại trong hệ thống");
+			}
+			nhanVien.setSoDienThoai(request.getSoDienThoai().trim());
+		}
+
+		// Update password if new password provided
+		if (request.getMatKhauMoi() != null && !request.getMatKhauMoi().isEmpty()) {
+			nhanVien.setMatKhau(passwordEncoder.encode(request.getMatKhauMoi()));
+		}
+
+		nhanVienRepository.save(nhanVien);
+
+		StringBuilder message = new StringBuilder("Cập nhật thông tin thành công");
+		if (request.getMatKhauMoi() != null && !request.getMatKhauMoi().isEmpty()) {
+			message.append(" và đổi mật khẩu thành công");
+		}
+		return new MessageResponse(message.toString());
 	}
 
 	public MessageResponse changePassword(ChangePasswordRequest request) {

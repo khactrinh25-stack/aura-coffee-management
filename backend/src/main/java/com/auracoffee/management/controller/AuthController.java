@@ -11,6 +11,7 @@ import com.auracoffee.management.dto.ChangePasswordRequest;
 import com.auracoffee.management.dto.LoginRequest;
 import com.auracoffee.management.dto.LoginResponse;
 import com.auracoffee.management.dto.MessageResponse;
+import com.auracoffee.management.dto.UpdateProfileRequest;
 import com.auracoffee.management.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -28,6 +29,16 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 		return ResponseEntity.ok(authService.login(request));
+	}
+
+	@PutMapping("/update-profile")
+	public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+		try {
+			return ResponseEntity.ok(authService.updateProfile(request));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(e.getMessage()));
+		}
 	}
 
 	@PutMapping("/change-password")

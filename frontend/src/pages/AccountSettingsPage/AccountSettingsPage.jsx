@@ -5,53 +5,55 @@ import styles from './AccountSettingsPage.module.css'
 
 function AccountSettingsPage() {
   const nhanVien = getNhanVienSession()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [soDienThoai, setSoDienThoai] = useState(nhanVien?.soDienThoai || '')
   const [matKhauCu, setMatKhauCu] = useState('')
-  const [matKhauMoi, setMatKhauMoi] = useState('')
-  const [xacNhanMatKhauMoi, setXacNhanMatKhauMoi] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Change password modal state
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [cpMatKhauCu, setCpMatKhauCu] = useState('')
+  const [cpMatKhauMoi, setCpMatKhauMoi] = useState('')
+  const [cpXacNhanMatKhauMoi, setCpXacNhanMatKhauMoi] = useState('')
+
   const closeModal = () => {
     setIsModalOpen(false)
-    setMatKhauCu('')
-    setMatKhauMoi('')
-    setXacNhanMatKhauMoi('')
+    setCpMatKhauCu('')
+    setCpMatKhauMoi('')
+    setCpXacNhanMatKhauMoi('')
     setError('')
     setSuccess('')
   }
 
-  const handleSubmit = async (event) => {
+  const handleChangePassword = async (event) => {
     event.preventDefault()
     setError('')
     setSuccess('')
 
-    if (matKhauMoi !== xacNhanMatKhauMoi) {
+    if (cpMatKhauMoi !== cpXacNhanMatKhauMoi) {
       setError('Mật khẩu xác nhận không khớp')
       return
     }
 
-    if (matKhauMoi.length < 6) {
+    if (cpMatKhauMoi.length < 6) {
       setError('Mật khẩu mới phải có ít nhất 6 ký tự')
       return
     }
 
     setIsSubmitting(true)
     try {
-      await apiClient('/auth/change-password', {
+      const result = await apiClient('/auth/update-profile', {
         method: 'PUT',
         body: JSON.stringify({
           maNhanVien: nhanVien.maNhanVien,
-          matKhauCu,
-          matKhauMoi,
-          xacNhanMatKhauMoi,
+          matKhauCu: cpMatKhauCu,
+          matKhauMoi: cpMatKhauMoi,
+          xacNhanMatKhauMoi: cpXacNhanMatKhauMoi,
         }),
       })
-      setSuccess('Đổi mật khẩu thành công')
-      setMatKhauCu('')
-      setMatKhauMoi('')
-      setXacNhanMatKhauMoi('')
+      setSuccess(result.message || 'Đổi mật khẩu thành công')
+      closeModal()
     } catch (err) {
       setError(err.message || 'Không thể đổi mật khẩu')
     } finally {
@@ -59,24 +61,119 @@ function AccountSettingsPage() {
     }
   }
 
+  const handleSaveChanges = async (event) => {
+    event.preventDefault()
+    setError('')
+    setSuccess('')
+
+    if (!matKhauCu.trim()) {
+      setError('Vui lòng nhập mật khẩu hiện tại để xác nhận thay đổi')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const result = await apiClient('/auth/update-profile', {
+        method: 'PUT',
+        body: JSON.stringify({
+          maNhanVien: nhanVien.maNhanVien,
+          matKhauCu: matKhauCu,
+          soDienThoai: soDienThoai,
+        }),
+      })
+      setSuccess(result.message || 'Cập nhật thông tin thành công')
+      setMatKhauCu('')
+    } catch (err) {
+      setError(err.message || 'Không thể cập nhật thông tin')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const roleLabel = nhanVien?.vaiTro === 'Admin' ? 'Quản trị viên' : 'Nhân viên'
+
   return (
     <section className={styles.page}>
       <h1 className={styles.title}>Cài đặt tài khoản</h1>
-      <p className={styles.subtitle}>
-        {nhanVien?.hoTen} — {nhanVien?.tenDangNhap} ({nhanVien?.vaiTro})
-      </p>
 
       <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Bảo mật</h2>
+        <h2 className={styles.cardTitle}>Thông tin tài khoản</h2>
+
+        {/* Full name - read only */}
+        <div className={styles.fieldGroup}>
+          <label className={styles.label}>Họ tên</label>
+          <input
+            className={`${styles.input} ${styles.inputReadOnly}`}
+            value={nhanVien?.hoTen || ''}
+            readOnly
+          />
+        </div>
+
+        {/* Phone number - editable */}
+        <div className={styles.fieldGroup}>
+          <label className={styles.label}>Số điện thoại</label>
+          <input
+            className={styles.input}
+            type="text"
+            value={soDienThoai}
+            onChange={(e) => setSoDienThoai(e.target.value)}
+          />
+        </div>
+
+        {/* Role - read only */}
+        <div className={styles.fieldGroup}>
+          <label className={styles.label}>Quyền hạn</label>
+          <input
+            className={`${styles.input} ${styles.inputReadOnly}`}
+            value={roleLabel}
+            readOnly
+          />
+        </div>
+
+        {/* Current password field */}
+        <div className={styles.fieldGroup}>
+          <label className={styles.label}>Mật khẩu hiện tại</label>
+          <input
+            className={styles.input}
+            type="password"
+            placeholder="Nhập mật khẩu hiện tại để xác nhận thay đổi"
+            value={matKhauCu}
+            onChange={(e) => setMatKhauCu(e.target.value)}
+          />
+        </div>
+
+        {/* Change password button */}
         <button
           type="button"
-          className={styles.changeButton}
+          className={styles.changePasswordButton}
           onClick={() => setIsModalOpen(true)}
         >
           Đổi mật khẩu
         </button>
+
+        {error ? (
+          <p className={styles.error} role="alert">
+            {error}
+          </p>
+        ) : null}
+        {success ? (
+          <p className={styles.success} role="status">
+            {success}
+          </p>
+        ) : null}
+
+        {/* Save button */}
+        <button
+          type="button"
+          className={styles.saveButton}
+          onClick={handleSaveChanges}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}
+        </button>
       </div>
 
+      {/* Change password modal */}
       {isModalOpen ? (
         <div className={styles.overlay} role="presentation" onClick={closeModal}>
           <div
@@ -88,43 +185,43 @@ function AccountSettingsPage() {
             <h2 id="change-password-title" className={styles.modalTitle}>
               Đổi mật khẩu
             </h2>
-            <form onSubmit={handleSubmit} noValidate>
+            <form onSubmit={handleChangePassword} noValidate>
               <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="matKhauCu">
+                <label className={styles.label} htmlFor="cpMatKhauCu">
                   Mật khẩu hiện tại
                 </label>
                 <input
-                  id="matKhauCu"
+                  id="cpMatKhauCu"
                   className={styles.input}
                   type="password"
-                  value={matKhauCu}
-                  onChange={(e) => setMatKhauCu(e.target.value)}
+                  value={cpMatKhauCu}
+                  onChange={(e) => setCpMatKhauCu(e.target.value)}
                   required
                 />
               </div>
               <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="matKhauMoi">
+                <label className={styles.label} htmlFor="cpMatKhauMoi">
                   Mật khẩu mới
                 </label>
                 <input
-                  id="matKhauMoi"
+                  id="cpMatKhauMoi"
                   className={styles.input}
                   type="password"
-                  value={matKhauMoi}
-                  onChange={(e) => setMatKhauMoi(e.target.value)}
+                  value={cpMatKhauMoi}
+                  onChange={(e) => setCpMatKhauMoi(e.target.value)}
                   required
                 />
               </div>
               <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="xacNhanMatKhauMoi">
+                <label className={styles.label} htmlFor="cpXacNhanMatKhauMoi">
                   Xác nhận mật khẩu mới
                 </label>
                 <input
-                  id="xacNhanMatKhauMoi"
+                  id="cpXacNhanMatKhauMoi"
                   className={styles.input}
                   type="password"
-                  value={xacNhanMatKhauMoi}
-                  onChange={(e) => setXacNhanMatKhauMoi(e.target.value)}
+                  value={cpXacNhanMatKhauMoi}
+                  onChange={(e) => setCpXacNhanMatKhauMoi(e.target.value)}
                   required
                 />
               </div>
