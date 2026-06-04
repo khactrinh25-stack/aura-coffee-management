@@ -25,6 +25,9 @@ public class KhachHang {
     @Column(name = "diem_tich_luy")
     private Integer diemTichLuy = 0;
 
+    @Column(name = "da_xoa", nullable = false)
+    private Boolean daXoa = false;
+
     public Integer getMaKhachHang() {
         return maKhachHang;
     }
@@ -55,5 +58,13 @@ public class KhachHang {
 
     public void setDiemTichLuy(Integer diemTichLuy) {
         this.diemTichLuy = diemTichLuy;
+    }
+
+    public Boolean getDaXoa() {
+        return daXoa;
+    }
+
+    public void setDaXoa(Boolean daXoa) {
+        this.daXoa = daXoa;
     }
 }

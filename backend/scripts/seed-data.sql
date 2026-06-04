@@ -83,18 +83,18 @@ GO
 -- ============================================================
 -- 4. KHACH_HANG (10 khách hàng)
 -- ============================================================
-INSERT INTO KHACH_HANG (ho_ten, so_dien_thoai, diem_tich_luy)
+INSERT INTO KHACH_HANG (ho_ten, so_dien_thoai, diem_tich_luy, da_xoa)
 VALUES
-    (N'Trần Văn Bình',  '0912345678', 120),
-    (N'Phạm Thị Cúc',   '0912345679', 250),
-    (N'Hoàng Minh Đức', '0912345680', 0),
-    (N'Ngô Thị Hoa',    '0912345681', 75),
-    (N'Đỗ Văn Hùng',    '0912345682', 30),
-    (N'Vũ Thị Lan',     '0912345683', 180),
-    (N'Bùi Quốc Tuấn',  '0912345684', 5),
-    (N'Dương Thị Mai',  '0912345685', 90),
-    (N'Lý Văn Tài',     '0912345686', 0),
-    (N'Mai Thị Thu',    '0912345687', 200);
+    (N'Trần Văn Bình',  '0912345678', 120, 0),
+    (N'Phạm Thị Cúc',   '0912345679', 250, 0),
+    (N'Hoàng Minh Đức', '0912345680', 0,   0),
+    (N'Ngô Thị Hoa',    '0912345681', 75,  0),
+    (N'Đỗ Văn Hùng',    '0912345682', 30,  0),
+    (N'Vũ Thị Lan',     '0912345683', 180, 0),
+    (N'Bùi Quốc Tuấn',  '0912345684', 5,   0),
+    (N'Dương Thị Mai',  '0912345685', 90,  0),
+    (N'Lý Văn Tài',     '0912345686', 0,   0),
+    (N'Mai Thị Thu',    '0912345687', 200, 0);
 GO
 
 PRINT '=== SEED DATA COMPLETED ===';
