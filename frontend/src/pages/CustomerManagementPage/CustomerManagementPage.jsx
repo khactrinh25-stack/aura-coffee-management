@@ -218,12 +218,14 @@ function CustomerManagementPage() {
   }, []);
 
   const filteredCustomers = useMemo(() => {
-    const term = searchTerm.trim();
+    const term = searchTerm.trim().toLowerCase();
     if (!term) return customers;
 
-    return customers.filter((customer) => (
-      String(customer.soDienThoai || '').includes(term)
-    ));
+    return customers.filter((customer) => {
+      const phone = String(customer.soDienThoai || '').toLowerCase();
+      const name = String(customer.hoTen || '').toLowerCase();
+      return phone.includes(term) || name.includes(term);
+    });
   }, [customers, searchTerm]);
 
   const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE));
@@ -260,7 +262,7 @@ function CustomerManagementPage() {
                 setSearchTerm(event.target.value);
                 setCurrentPage(1);
               }}
-              placeholder="Tìm kiếm số điện thoại..."
+              placeholder="Tìm kiếm tên hoặc số điện thoại..."
             />
             <FaSearch className={styles.searchIcon} />
           </label>
