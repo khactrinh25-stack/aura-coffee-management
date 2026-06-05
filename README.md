@@ -6,7 +6,7 @@ The Aura Coffee software is a centralized management system designed for the tak
 ## 2. Deployment Technologies
 * The user interface utilizes the React library initialized with the Vite tool. The system uses the React Router library for page routing and CSS Modules for interface styling.
 * The server system uses the Java Spring Boot version 3 framework and manages software packages with Maven. The system requires the JDK version 17 execution environment.
-* The database system uses the Microsoft SQL Server management system.
+* The database system uses H2 in-memory database for local development (no SQL Server installation required).
 
 ## 3. Project Architecture
 * Detailed information regarding source code development standards and system architecture is specified in the docs/DEVELOPMENT_STANDARDS.md file.
@@ -27,11 +27,11 @@ Before starting, make sure you have the following installed:
 | Node.js | 18.x or later | https://nodejs.org/ |
 | JDK | 17 (Temurin/Adoptium) | https://adoptium.net/ |
 | Apache Maven | 3.8.x or later | https://maven.apache.org/ |
-| Microsoft SQL Server | 2019 or later (Express edition is sufficient) | https://www.microsoft.com/en-us/sql-server/sql-server-downloads |
-| SQL Server Management Studio (SSMS) | Latest | https://aka.ms/ssmsfullsetup |
 | Git | Latest | https://git-scm.com/ |
 
 > **Note:** Make sure the `JAVA_HOME` environment variable points to JDK 17 path, and `MAVEN_HOME` (or `M2_HOME`) points to your Maven installation directory.
+
+> **Info:** This project uses an **H2 in-memory database** for local development — you do **not** need to install SQL Server or create any database manually. The backend automatically creates tables and seeds sample data on startup.
 
 ---
 
@@ -47,64 +47,7 @@ cd aura-coffee-management
 
 ---
 
-### Step 2: Create the Database in SQL Server
-
-1. Open **SQL Server Management Studio (SSMS)** and connect to your local SQL Server instance.
-2. In the "Connect to Server" dialog:
-   - **Server type:** Database Engine
-   - **Server name:** `localhost` (or `.\SQLEXPRESS` if using SQL Server Express)
-   - **Authentication:** Windows Authentication (or SQL Server Authentication if you have a SQL login)
-
-3. After connecting, click **New Query** and run the following SQL script to create the database:
-
-```sql
-CREATE DATABASE AuraCoffeeDB;
-GO
-```
-
-4. Click **Execute** (or press F5). You should see "Commands completed successfully."
-
-5. You can verify the database was created by expanding **Databases** in the Object Explorer — you should see `AuraCoffeeDB`.
-
----
-
-### Step 3: Configure the Backend Connection
-
-1. Navigate to the project folder in File Explorer:
-   ```
-   C:\Users\%USERNAME%\Desktop\aura-coffee-management\backend\src\main\resources\
-   ```
-
-2. You will see a file named **`application.properties.example`**. This is a template file.
-
-3. **Copy** `application.properties.example` and rename the copy to **`application.properties`**.
-
-4. Open **`application.properties`** with Notepad or any text editor.
-
-5. Update the following fields with **your local SQL Server credentials**:
-
-   ```properties
-   spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=AuraCoffeeDB;encrypt=true;trustServerCertificate=true
-   spring.datasource.username=sa
-   spring.datasource.password=your-sql-server-password
-   jwt.secret=YourSuperSecretKeyThatIsAtLeast32CharactersLong
-   ```
-
-   > **Note:** 
-   > - If using SQL Server Express, change `localhost:1433` to `localhost\SQLEXPRESS:1433` or remove the instance name.
-   > - If using Windows Authentication, use these settings instead:
-   >   ```
-   >   spring.datasource.username=DESKTOP-XXXXX\YourName
-   >   spring.datasource.password=
-   >   ```
-   >   (You may also need to add `;integratedSecurity=true` to the URL)
-   > - The `jwt.secret` can be any random string at least 32 characters long.
-
-6. **Save the file.**
-
----
-
-### Step 4: Install Frontend Dependencies
+### Step 2: Install Frontend Dependencies
 
 1. Open **Command Prompt** and navigate to the project:
 
@@ -122,7 +65,7 @@ GO
 
 ---
 
-### Step 5: Install Backend Dependencies
+### Step 3: Install Backend Dependencies
 
 1. Open another **Command Prompt** and navigate to:
 
@@ -140,7 +83,37 @@ GO
 
 ---
 
-### Step 6: Run the System
+### Step 4: (Optional) Configure Gmail SMTP for Email Verification
+
+The system supports a "Forgot Password" feature that sends OTP codes via email. If you want to use this feature, you need to configure your Gmail SMTP credentials.
+
+1. Open the file:
+   ```
+   C:\Users\%USERNAME%\Desktop\aura-coffee-management\backend\src\main\resources\application-dev.properties
+   ```
+
+2. Find these lines at the bottom of the file:
+
+   ```properties
+   spring.mail.username=your-email@gmail.com
+   spring.mail.password=your-16-char-gmail-app-password
+   ```
+
+3. Replace `your-email@gmail.com` with **your Gmail address**.
+
+4. Replace `your-16-char-gmail-app-password` with a **16-character Gmail App Password**:
+   - Go to https://myaccount.google.com/apppasswords
+   - Select "Mail" as the app and "Windows Computer" as the device
+   - Click "Generate" and copy the 16-character password
+   - Paste it into the file
+
+5. **Save the file.**
+
+> **If you skip this step**, the email verification feature will not work, but all other features (login, sales, management) will function normally.
+
+---
+
+### Step 5: Run the System
 
 The project includes **two batch files** that will start both the backend and frontend automatically.
 
@@ -153,6 +126,7 @@ The project includes **two batch files** that will start both the backend and fr
 
 2. **Double-click** `start-backend.bat`.
    - A command prompt window will open.
+   - The script will automatically build and start the backend with the `dev` profile (using H2 in-memory database).
    - Wait until you see a message like:
      ```
      Started ManagementApplication in X.XXX seconds
@@ -169,11 +143,11 @@ The project includes **two batch files** that will start both the backend and fr
      ```
    - This means the frontend is running.
 
-> **Note for first-time startup:** When the backend starts for the first time, the `DataInitializer` component will automatically create all necessary tables (NHAN_VIEN, KHACH_HANG, DO_UONG, DANH_MUC, HOA_DON, CHI_TIET_HOA_DON) and seed sample data into the AuraCoffeeDB database. You do not need to run any SQL scripts manually.
+> **Note for first-time startup:** When the backend starts for the first time, the `DataInitializer` component will automatically create all necessary tables (NHAN_VIEN, KHACH_HANG, DO_UONG, DANH_MUC, HOA_DON, CHI_TIET_HOA_DON) and seed sample data into the H2 database. You do not need to run any SQL scripts manually.
 
 ---
 
-### Step 7: Open the Application
+### Step 6: Open the Application
 
 1. Open your browser (Chrome, Edge, etc.).
 2. Go to: **http://localhost:5173**
@@ -192,7 +166,7 @@ The seed data includes two default accounts:
 
 ---
 
-### Step 8: Verify Everything Works
+### Step 7: Verify Everything Works
 
 1. **Login as Admin**: Select the "Admin" user type on the login page, enter `admin` / `admin123`, click Login. You should see the **Admin Dashboard** with menus for managing products, customers, employees, and invoices.
 
@@ -204,19 +178,33 @@ The seed data includes two default accounts:
 
 ---
 
+### Step 8: (Optional) Access H2 Database Console
+
+The H2 in-memory database includes a web console for debugging and inspecting data.
+
+1. With the backend running, open your browser and go to: **http://localhost:8080/h2-console**
+2. Fill in the login fields:
+   - **JDBC URL:** `jdbc:h2:mem:aura`
+   - **Username:** `sa`
+   - **Password:** *(leave blank)*
+3. Click **Connect**. You can now browse tables and run SQL queries.
+
+---
+
 ## 5. Troubleshooting
 
 | Problem | Solution |
 |---------|----------|
-| Backend fails to start with "port 8080 already in use" | Close other Java applications or change the port in `application.properties` |
+| Backend fails to start with "port 8080 already in use" | Close other Java applications or the `start-backend.bat` window, then try again. The batch file will auto-kill processes on port 8080. |
 | Frontend shows blank page | Make sure the backend is running first (wait for `Started ManagementApplication`) |
-| Login fails with "Bad credentials" | Check that the `DataInitializer` ran successfully (check backend console logs for errors) |
-| Database connection error | Verify SQL Server is running (check services.msc for "SQL Server (MSSQLSERVER)") |
-| "Login failed for user 'sa'" | Enable SQL Server Authentication in SSMS and set a password for the `sa` account |
+| Login fails with "Bad credentials" | Check that the `DataInitializer` ran successfully (look for seed data logs in the backend console) |
+| `npm install` fails with network error | Retry or use a different network. You can also try `npm install --registry=https://registry.npmmirror.com` |
+| Maven build fails | Make sure `JAVA_HOME` points to JDK 17, not JDK 21 or later. Run `java -version` to verify. |
 
 ---
 
 ## 6. Important Notes
 - The `.vscode/` directory is shared to ensure consistent editor settings across the team.
 - For detailed coding rules and AI-assisted development guidelines, see `.clinerules/default-rules.md`.
-- Do NOT commit `application.properties` or `.env` files — they contain local credentials and are already in `.gitignore`.
+- Do NOT commit `.env` files — they contain local credentials and are already in `.gitignore`.
+- The `application-dev.properties` file is already on the repository — you only need to modify it if you want to enable Gmail SMTP.
