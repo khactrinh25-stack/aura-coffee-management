@@ -28,6 +28,9 @@ public class NhanVien {
 	@Column(name = "so_dien_thoai")
 	private String soDienThoai;
 
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "vai_tro")
 	private String vaiTro;
 
@@ -72,6 +75,14 @@ public class NhanVien {
 
 	public void setSoDienThoai(String soDienThoai) {
 		this.soDienThoai = soDienThoai;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getVaiTro() {

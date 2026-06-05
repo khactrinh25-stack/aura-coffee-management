@@ -8,6 +8,7 @@ public class LoginResponse {
     private String tenDangNhap;
     private String hoTen;
     private String soDienThoai;
+    private String email;
     private String vaiTro;
     private Boolean trangThai;
     private String token;
@@ -18,6 +19,7 @@ public class LoginResponse {
         dto.setTenDangNhap(entity.getTenDangNhap());
         dto.setHoTen(entity.getHoTen());
         dto.setSoDienThoai(entity.getSoDienThoai());
+        dto.setEmail(entity.getEmail());
         dto.setVaiTro(entity.getVaiTro());
         dto.setTrangThai(entity.getTrangThai());
         return dto;
@@ -37,6 +39,8 @@ public class LoginResponse {
     public void setHoTen(String hoTen) { this.hoTen = hoTen; }
     public String getSoDienThoai() { return soDienThoai; }
     public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public String getVaiTro() { return vaiTro; }
     public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
     public Boolean getTrangThai() { return trangThai; }

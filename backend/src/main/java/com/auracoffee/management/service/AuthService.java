@@ -22,11 +22,16 @@ public class AuthService {
 	private final NhanVienRepository nhanVienRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtUtil jwtUtil;
+	private final EmailService emailService;
+	private final OtpService otpService;
 
-	public AuthService(NhanVienRepository nhanVienRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+	public AuthService(NhanVienRepository nhanVienRepository, PasswordEncoder passwordEncoder,
+					   JwtUtil jwtUtil, EmailService emailService, OtpService otpService) {
 		this.nhanVienRepository = nhanVienRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtUtil = jwtUtil;
+		this.emailService = emailService;
+		this.otpService = otpService;
 	}
 
 	public LoginResponse login(LoginRequest request) {
@@ -105,10 +110,64 @@ public class AuthService {
 			throw new UnauthorizedException("Mật khẩu hiện tại không đúng");
 		}
 
+		// Check if OTP has been verified (requires OTP verification via the new flow)
+		if (!otpService.isOtpVerified(request.getMaNhanVien())) {
+			throw new IllegalArgumentException("Vui lòng xác thực OTP trước khi đổi mật khẩu");
+		}
+
 		nhanVien.setMatKhau(passwordEncoder.encode(request.getMatKhauMoi()));
 		nhanVienRepository.save(nhanVien);
 
+		// Clear OTP after successful password change
+		otpService.clearOtp(request.getMaNhanVien());
+
 		return new MessageResponse("Đổi mật khẩu thành công");
+	}
+
+	/**
+	 * Send OTP to employee's email for password change verification.
+	 */
+	public MessageResponse sendOtp(Integer maNhanVien) {
+		NhanVien nhanVien = nhanVienRepository.findById(maNhanVien)
+				.orElseThrow(() -> new UnauthorizedException("Không tìm thấy tài khoản"));
+
+		if (nhanVien.getEmail() == null || nhanVien.getEmail().isEmpty()) {
+			throw new IllegalArgumentException("Tài khoản chưa có email. Vui lòng liên hệ quản trị viên.");
+		}
+
+		String otpCode = otpService.generateOtp(maNhanVien);
+		emailService.sendOtpEmail(nhanVien.getEmail(), otpCode);
+
+		return new MessageResponse("Mã OTP đã được gửi đến email " + maskEmail(nhanVien.getEmail()));
+	}
+
+	/**
+	 * Verify OTP. If valid, marks OTP as pending so changePassword can proceed.
+	 */
+	public MessageResponse verifyOtp(Integer maNhanVien, String otpCode) {
+		boolean isValid = otpService.verifyOtp(maNhanVien, otpCode);
+
+		if (!isValid) {
+			throw new IllegalArgumentException("Mã OTP không hợp lệ hoặc đã hết hạn");
+		}
+
+		return new MessageResponse("Xác thực OTP thành công");
+	}
+
+	/**
+	 * Mask email for display: nguyenkhactrinh25@gmail.com -> ng***********@gmail.com
+	 */
+	private String maskEmail(String email) {
+		if (email == null || !email.contains("@")) {
+			return email;
+		}
+		String[] parts = email.split("@");
+		String name = parts[0];
+		String domain = parts[1];
+		if (name.length() <= 2) {
+			return name.charAt(0) + "***@" + domain;
+		}
+		return name.charAt(0) + "***" + name.charAt(name.length() - 1) + "@" + domain;
 	}
 
 	private boolean isAccountLocked(NhanVien nhanVien) {

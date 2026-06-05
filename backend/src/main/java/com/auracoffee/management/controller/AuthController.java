@@ -11,7 +11,9 @@ import com.auracoffee.management.dto.ChangePasswordRequest;
 import com.auracoffee.management.dto.LoginRequest;
 import com.auracoffee.management.dto.LoginResponse;
 import com.auracoffee.management.dto.MessageResponse;
+import com.auracoffee.management.dto.SendOtpRequest;
 import com.auracoffee.management.dto.UpdateProfileRequest;
+import com.auracoffee.management.dto.VerifyOtpRequest;
 import com.auracoffee.management.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -44,6 +46,31 @@ public class AuthController {
 	@PutMapping("/change-password")
 	public ResponseEntity<MessageResponse> changePassword(
 			@Valid @RequestBody ChangePasswordRequest request) {
-		return ResponseEntity.ok(authService.changePassword(request));
+		try {
+			return ResponseEntity.ok(authService.changePassword(request));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(e.getMessage()));
+		}
+	}
+
+	@PostMapping("/send-otp")
+	public ResponseEntity<?> sendOtp(@Valid @RequestBody SendOtpRequest request) {
+		try {
+			return ResponseEntity.ok(authService.sendOtp(request.getMaNhanVien()));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(e.getMessage()));
+		}
+	}
+
+	@PostMapping("/verify-otp")
+	public ResponseEntity<?> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
+		try {
+			return ResponseEntity.ok(authService.verifyOtp(request.getMaNhanVien(), request.getOtpCode()));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(e.getMessage()));
+		}
 	}
 }

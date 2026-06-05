@@ -54,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("=== DATA INITIALIZER: Checking and seeding data ===");
 
         // ============================================================
-        // 1. Seed NHAN_VIEN (4 nhân viên) - only if empty
+        // 1. Seed NHAN_VIEN (2 nhân viên: admin + nv01) - only if empty
         // ============================================================
         if (nhanVienRepository.count() == 0) {
             System.out.println("  - NHAN_VIEN: seeding...");
@@ -64,6 +64,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setMatKhau(passwordEncoder.encode("123456"));
             admin.setHoTen("Admin Aura Coffee");
             admin.setSoDienThoai("0900000001");
+            admin.setEmail("nguyenkhactrinh25@gmail.com");
             admin.setVaiTro("Admin");
             admin.setTrangThai(true);
             nhanVienRepository.save(admin);
@@ -73,27 +74,12 @@ public class DataInitializer implements CommandLineRunner {
             nv1.setMatKhau(passwordEncoder.encode("123456"));
             nv1.setHoTen("Nguyễn Văn An");
             nv1.setSoDienThoai("0900000002");
+            nv1.setEmail("modgamemoi@gmail.com");
             nv1.setVaiTro("NhanVien");
             nv1.setTrangThai(true);
             nhanVienRepository.save(nv1);
 
-            NhanVien nv2 = new NhanVien();
-            nv2.setTenDangNhap("nv02");
-            nv2.setMatKhau(passwordEncoder.encode("123456"));
-            nv2.setHoTen("Trần Thị Bích");
-            nv2.setSoDienThoai("0900000003");
-            nv2.setVaiTro("NhanVien");
-            nv2.setTrangThai(true);
-            nhanVienRepository.save(nv2);
-
-            NhanVien nv3 = new NhanVien();
-            nv3.setTenDangNhap("nv03");
-            nv3.setMatKhau(passwordEncoder.encode("123456"));
-            nv3.setHoTen("Lê Hoàng Nam");
-            nv3.setSoDienThoai("0900000004");
-            nv3.setVaiTro("NhanVien");
-            nv3.setTrangThai(true);
-            nhanVienRepository.save(nv3);
+            System.out.println("  - NHAN_VIEN: seeded admin + nv01");
         } else {
             System.out.println("  - NHAN_VIEN: already exists, skipping");
         }
@@ -230,98 +216,95 @@ public class DataInitializer implements CommandLineRunner {
             List<KhachHang> khachHangs = khachHangRepository.findAll();
             List<DoUong> doUongs = doUongRepository.findAll();
 
-            // Filter only employees (maNhanVien >= 2, since id=1 is admin)
-            // In our seed: admin=1, nv01=2, nv02=3, nv03=4
+            // Find employee references (admin=1, nv01=2)
             NhanVien nv01 = nhanViens.stream().filter(nv -> nv.getTenDangNhap().equals("nv01")).findFirst().orElse(null);
-            NhanVien nv02 = nhanViens.stream().filter(nv -> nv.getTenDangNhap().equals("nv02")).findFirst().orElse(null);
-            NhanVien nv03 = nhanViens.stream().filter(nv -> nv.getTenDangNhap().equals("nv03")).findFirst().orElse(null);
 
-            if (nv01 == null || nv02 == null || nv03 == null) {
-                System.out.println("  - WARNING: Could not find employee references, skipping invoice seed");
+            if (nv01 == null) {
+                System.out.println("  - WARNING: Could not find nv01 reference, skipping invoice seed");
                 return;
             }
 
             // Invoice 1: nv01 - Cash - Walk-in customer (no KhachHang)
             HoaDon hd1 = createHoaDon(LocalDateTime.now().minusDays(5).withHour(8).withMinute(30), 155000, "TIEN_MAT", nv01.getMaNhanVien(), null, 0, 155);
-            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "CF002"), 2, 29000, 58000, null);          // 2x Cà phê sữa đá
-            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "TS001"), 1, 50000, 50000, "Size L"); // 1x Trà sữa trân châu size L
-            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "CF003"), 1, 35000, 35000, null);          // Thêm size
+            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "CF002"), 2, 29000, 58000, null);
+            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "TS001"), 1, 50000, 50000, "Size L");
+            createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "CF003"), 1, 35000, 35000, null);
             createChiTietHoaDon(hd1.getMaHoaDon(), findDoUongByCode(doUongs, "DX002"), 1, 55000, 55000, null);
             System.out.println("    - Invoice #1: " + hd1.getMaHoaDon() + " - nv01 - 155,000 VND - TIEN_MAT");
 
             // Invoice 2: nv01 - Cash - Customer Trần Văn Bình
             HoaDon hd2 = createHoaDon(LocalDateTime.now().minusDays(4).withHour(10).withMinute(15), 120000, "TIEN_MAT", nv01.getMaNhanVien(), khachHangs.get(0).getMaKhachHang(), 20, 100);
-            createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "CF004"), 2, 30000, 60000, null);          // 2x Espresso
-            createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "ST001"), 1, 45000, 45000, "Size L"); // 1x Sinh tố bơ size L
+            createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "CF004"), 2, 30000, 60000, null);
+            createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "ST001"), 1, 45000, 45000, "Size L");
             createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "CS003"), 1, 42000, 42000, null);
             createChiTietHoaDon(hd2.getMaHoaDon(), findDoUongByCode(doUongs, "DX001"), 1, 49000, 49000, null);
             System.out.println("    - Invoice #2: " + hd2.getMaHoaDon() + " - nv01 - 120,000 VND (after 20pts used) - TIEN_MAT");
 
-            // Invoice 3: nv02 - Transfer - Customer Phạm Thị Cúc
-            HoaDon hd3 = createHoaDon(LocalDateTime.now().minusDays(3).withHour(14).withMinute(0), 250000, "CHUYEN_KHOAN", nv02.getMaNhanVien(), khachHangs.get(1).getMaKhachHang(), 50, 200);
-            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "TS002"), 2, 55000, 110000, "Size L"); // 2x Trà sữa matcha size L
-            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "TS003"), 1, 52000, 52000, null);          // 1x Trà sữa khoai môn
-            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "DX002"), 1, 55000, 55000, null);          // 1x Cookies & Cream
+            // Invoice 3: nv01 - Transfer - Customer Phạm Thị Cúc
+            HoaDon hd3 = createHoaDon(LocalDateTime.now().minusDays(3).withHour(14).withMinute(0), 250000, "CHUYEN_KHOAN", nv01.getMaNhanVien(), khachHangs.get(1).getMaKhachHang(), 50, 200);
+            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "TS002"), 2, 55000, 110000, "Size L");
+            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "TS003"), 1, 52000, 52000, null);
+            createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "DX002"), 1, 55000, 55000, null);
             createChiTietHoaDon(hd3.getMaHoaDon(), findDoUongByCode(doUongs, "CS002"), 1, 45000, 45000, null);
-            System.out.println("    - Invoice #3: " + hd3.getMaHoaDon() + " - nv02 - 250,000 VND (after 50pts used) - CHUYEN_KHOAN");
+            System.out.println("    - Invoice #3: " + hd3.getMaHoaDon() + " - nv01 - 250,000 VND (after 50pts used) - CHUYEN_KHOAN");
 
-            // Invoice 4: nv02 - Cash - Walk-in customer
-            HoaDon hd4 = createHoaDon(LocalDateTime.now().minusDays(2).withHour(7).withMinute(45), 84000, "TIEN_MAT", nv02.getMaNhanVien(), null, 0, 84);
-            createChiTietHoaDon(hd4.getMaHoaDon(), findDoUongByCode(doUongs, "CF001"), 2, 25000, 50000, null);          // 2x Cà phê đen
-            createChiTietHoaDon(hd4.getMaHoaDon(), findDoUongByCode(doUongs, "CF003"), 1, 35000, 35000, "Size L"); // 1x Bạc xỉu size L
-            System.out.println("    - Invoice #4: " + hd4.getMaHoaDon() + " - nv02 - 84,000 VND - TIEN_MAT");
+            // Invoice 4: nv01 - Cash - Walk-in customer
+            HoaDon hd4 = createHoaDon(LocalDateTime.now().minusDays(2).withHour(7).withMinute(45), 84000, "TIEN_MAT", nv01.getMaNhanVien(), null, 0, 84);
+            createChiTietHoaDon(hd4.getMaHoaDon(), findDoUongByCode(doUongs, "CF001"), 2, 25000, 50000, null);
+            createChiTietHoaDon(hd4.getMaHoaDon(), findDoUongByCode(doUongs, "CF003"), 1, 35000, 35000, "Size L");
+            System.out.println("    - Invoice #4: " + hd4.getMaHoaDon() + " - nv01 - 84,000 VND - TIEN_MAT");
 
-            // Invoice 5: nv03 - Transfer - Customer Hoàng Minh Đức
-            HoaDon hd5 = createHoaDon(LocalDateTime.now().minusDays(1).withHour(11).withMinute(30), 400000, "CHUYEN_KHOAN", nv03.getMaNhanVien(), khachHangs.get(2).getMaKhachHang(), 0, 400);
-            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "TS005"), 3, 45000, 135000, null);         // 3x Trà đào cam sả
-            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "ST003"), 2, 42000, 84000, "Size L"); // 2x Sinh tố dâu tây size L
-            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "DX003"), 2, 52000, 104000, null);         // 2x Matcha đá xay
+            // Invoice 5: nv01 - Transfer - Customer Hoàng Minh Đức
+            HoaDon hd5 = createHoaDon(LocalDateTime.now().minusDays(1).withHour(11).withMinute(30), 400000, "CHUYEN_KHOAN", nv01.getMaNhanVien(), khachHangs.get(2).getMaKhachHang(), 0, 400);
+            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "TS005"), 3, 45000, 135000, null);
+            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "ST003"), 2, 42000, 84000, "Size L");
+            createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "DX003"), 2, 52000, 104000, null);
             createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "CS001"), 1, 35000, 35000, null);
             createChiTietHoaDon(hd5.getMaHoaDon(), findDoUongByCode(doUongs, "CF005"), 1, 39000, 39000, null);
-            System.out.println("    - Invoice #5: " + hd5.getMaHoaDon() + " - nv03 - 400,000 VND - CHUYEN_KHOAN");
+            System.out.println("    - Invoice #5: " + hd5.getMaHoaDon() + " - nv01 - 400,000 VND - CHUYEN_KHOAN");
 
             // Invoice 6: nv01 - Cash - Customer Ngô Thị Hoa (sử dụng điểm)
             HoaDon hd6 = createHoaDon(LocalDateTime.now().minusHours(20).withHour(9).withMinute(0), 180000, "TIEN_MAT", nv01.getMaNhanVien(), khachHangs.get(3).getMaKhachHang(), 30, 150);
-            createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "ST004"), 2, 45000, 90000, null);          // 2x Sinh tố mãng cầu
-            createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "ST002"), 1, 40000, 40000, "Size L"); // 1x Sinh tố xoài size L
+            createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "ST004"), 2, 45000, 90000, null);
+            createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "ST002"), 1, 40000, 40000, "Size L");
             createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "CF005"), 1, 39000, 39000, null);
             createChiTietHoaDon(hd6.getMaHoaDon(), findDoUongByCode(doUongs, "CS002"), 1, 45000, 45000, null);
             System.out.println("    - Invoice #6: " + hd6.getMaHoaDon() + " - nv01 - 180,000 VND (after 30pts used) - TIEN_MAT");
 
-            // Invoice 7: nv02 - Cash - Walk-in (khách vãng lai)
-            HoaDon hd7 = createHoaDon(LocalDateTime.now().minusHours(15).withHour(15).withMinute(20), 130000, "TIEN_MAT", nv02.getMaNhanVien(), null, 0, 130);
-            createChiTietHoaDon(hd7.getMaHoaDon(), findDoUongByCode(doUongs, "ST007"), 2, 35000, 70000, null);          // 2x Sinh tố dưa hấu
-            createChiTietHoaDon(hd7.getMaHoaDon(), findDoUongByCode(doUongs, "ST009"), 1, 38000, 38000, "Size L"); // 1x Sinh tố ổi size L
+            // Invoice 7: nv01 - Cash - Walk-in (khách vãng lai)
+            HoaDon hd7 = createHoaDon(LocalDateTime.now().minusHours(15).withHour(15).withMinute(20), 130000, "TIEN_MAT", nv01.getMaNhanVien(), null, 0, 130);
+            createChiTietHoaDon(hd7.getMaHoaDon(), findDoUongByCode(doUongs, "ST007"), 2, 35000, 70000, null);
+            createChiTietHoaDon(hd7.getMaHoaDon(), findDoUongByCode(doUongs, "ST009"), 1, 38000, 38000, "Size L");
             createChiTietHoaDon(hd7.getMaHoaDon(), findDoUongByCode(doUongs, "ST005"), 1, 35000, 35000, null);
-            System.out.println("    - Invoice #7: " + hd7.getMaHoaDon() + " - nv02 - 130,000 VND - TIEN_MAT");
+            System.out.println("    - Invoice #7: " + hd7.getMaHoaDon() + " - nv01 - 130,000 VND - TIEN_MAT");
 
-            // Invoice 8: nv03 - Transfer - Customer Đỗ Văn Hùng
-            HoaDon hd8 = createHoaDon(LocalDateTime.now().minusHours(10).withHour(10).withMinute(45), 320000, "CHUYEN_KHOAN", nv03.getMaNhanVien(), khachHangs.get(4).getMaKhachHang(), 10, 310);
-            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "TS004"), 2, 48000, 96000, null);          // 2x Trà sữa thái xanh
-            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "TS002"), 1, 55000, 55000, "Size L"); // 1x Trà sữa matcha size L
-            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "DX001"), 2, 49000, 98000, null);         // 2x Cà phê đá xay
+            // Invoice 8: nv01 - Transfer - Customer Đỗ Văn Hùng
+            HoaDon hd8 = createHoaDon(LocalDateTime.now().minusHours(10).withHour(10).withMinute(45), 320000, "CHUYEN_KHOAN", nv01.getMaNhanVien(), khachHangs.get(4).getMaKhachHang(), 10, 310);
+            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "TS004"), 2, 48000, 96000, null);
+            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "TS002"), 1, 55000, 55000, "Size L");
+            createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "DX001"), 2, 49000, 98000, null);
             createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "ST008"), 1, 38000, 38000, null);
             createChiTietHoaDon(hd8.getMaHoaDon(), findDoUongByCode(doUongs, "CS003"), 1, 42000, 42000, null);
-            System.out.println("    - Invoice #8: " + hd8.getMaHoaDon() + " - nv03 - 320,000 VND (after 10pts used) - CHUYEN_KHOAN");
+            System.out.println("    - Invoice #8: " + hd8.getMaHoaDon() + " - nv01 - 320,000 VND (after 10pts used) - CHUYEN_KHOAN");
 
             // Invoice 9: nv01 - Cash - Customer Vũ Thị Lan (sử dụng nhiều điểm)
             HoaDon hd9 = createHoaDon(LocalDateTime.now().minusHours(5).withHour(8).withMinute(0), 560000, "TIEN_MAT", nv01.getMaNhanVien(), khachHangs.get(5).getMaKhachHang(), 100, 460);
-            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "ST006"), 3, 35000, 105000, null);         // 3x Sinh tố táo
-            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "ST009"), 2, 38000, 76000, null);         // 2x Sinh tố ổi
-            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "DX003"), 2, 52000, 104000, "Size L"); // 2x Matcha đá xay size L
-            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "CS002"), 2, 45000, 90000, null);         // 2x Socola đá xay
+            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "ST006"), 3, 35000, 105000, null);
+            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "ST009"), 2, 38000, 76000, null);
+            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "DX003"), 2, 52000, 104000, "Size L");
+            createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "CS002"), 2, 45000, 90000, null);
             createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "CF002"), 2, 29000, 58000, null);
             createChiTietHoaDon(hd9.getMaHoaDon(), findDoUongByCode(doUongs, "TS001"), 1, 50000, 50000, null);
             System.out.println("    - Invoice #9: " + hd9.getMaHoaDon() + " - nv01 - 560,000 VND (after 100pts used) - TIEN_MAT");
 
-            // Invoice 10: nv03 - Cash - Walk-in customer (khách vãng lai, gần đây nhất)
-            HoaDon hd10 = createHoaDon(LocalDateTime.now().minusHours(1).withMinute(random.nextInt(60)), 380000, "TIEN_MAT", nv03.getMaNhanVien(), null, 0, 380);
-            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "CF005"), 3, 39000, 117000, null);        // 3x Latte
-            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "DX002"), 2, 55000, 110000, "Size L"); // 2x Cookies & Cream size L
-            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "CS001"), 2, 35000, 70000, null);        // 2x Cacao nóng
+            // Invoice 10: nv01 - Cash - Walk-in customer (khách vãng lai, gần đây nhất)
+            HoaDon hd10 = createHoaDon(LocalDateTime.now().minusHours(1).withMinute(random.nextInt(60)), 380000, "TIEN_MAT", nv01.getMaNhanVien(), null, 0, 380);
+            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "CF005"), 3, 39000, 117000, null);
+            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "DX002"), 2, 55000, 110000, "Size L");
+            createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "CS001"), 2, 35000, 70000, null);
             createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "ST003"), 1, 42000, 42000, null);
             createChiTietHoaDon(hd10.getMaHoaDon(), findDoUongByCode(doUongs, "ST001"), 1, 45000, 45000, "Size L");
-            System.out.println("    - Invoice #10: " + hd10.getMaHoaDon() + " - nv03 - 380,000 VND - TIEN_MAT");
+            System.out.println("    - Invoice #10: " + hd10.getMaHoaDon() + " - nv01 - 380,000 VND - TIEN_MAT");
 
             System.out.println("  - HOA_DON: seeded 10 invoices successfully");
             System.out.println("  - CHI_TIET_HOA_DON: seeded details for all 10 invoices");
@@ -330,7 +313,7 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         System.out.println("=== DATA INITIALIZER: Seed completed ===");
-        System.out.println("  - 4 nhân viên (admin / nv01 / nv02 / nv03, all password: 123456)");
+        System.out.println("  - 2 nhân viên (admin / nv01, password: 123456)");
         System.out.println("  - 5 danh mục (Cà phê / Trà sữa / Sinh tố / Đá xay / Cacao & Socola)");
         System.out.println("  - 25 đồ uống");
         System.out.println("  - 10 khách hàng mẫu");

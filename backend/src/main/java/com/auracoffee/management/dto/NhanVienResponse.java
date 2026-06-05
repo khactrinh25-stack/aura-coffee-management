@@ -8,6 +8,7 @@ public class NhanVienResponse {
     private String tenDangNhap;
     private String hoTen;
     private String soDienThoai;
+    private String email;
     private String vaiTro;
     private Boolean trangThai;
     private String tenDangNhapCode;
@@ -18,9 +19,9 @@ public class NhanVienResponse {
         res.setTenDangNhap(nv.getTenDangNhap());
         res.setHoTen(nv.getHoTen());
         res.setSoDienThoai(nv.getSoDienThoai());
+        res.setEmail(nv.getEmail());
         res.setVaiTro(nv.getVaiTro());
         res.setTrangThai(nv.getTrangThai());
-        // Generate a code like NV-001 from maNhanVien
         res.setTenDangNhapCode(nv.getTenDangNhap());
         return res;
     }
@@ -55,6 +56,14 @@ public class NhanVienResponse {
 
     public void setSoDienThoai(String soDienThoai) {
         this.soDienThoai = soDienThoai;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getVaiTro() {
